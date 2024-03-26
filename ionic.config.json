@@ -1,0 +1,7 @@
+{
+  "name": "fleet-manager-front",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

@@ -1,0 +1,8 @@
+{
+	"appId": "fleet.manager.front",
+	"appName": "fleet-manager-front",
+	"webDir": "dist",
+	"server": {
+		"androidScheme": "https"
+	}
+}
