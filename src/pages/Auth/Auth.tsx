@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import {
     IonPage,
     IonContent,
@@ -14,6 +14,16 @@ import {
 import './Auth.scss';
 
 const AuthPage: React.FC = () => {
+    const [email, setEmail] = useState('');
+    const passwordRef = useRef<HTMLIonInputElement>(null); // Utilisation d'une référence pour le champ de mot de passe
+
+    const handleLogin = () => {
+        // Utiliser les valeurs de l'email et du mot de passe ici
+        const enteredPassword = passwordRef.current?.value || ''; // Obtenir la valeur actuelle du champ de mot de passe
+        console.log('Email: ', email);
+        console.log('Mot de passe: ', enteredPassword);
+    };
+
     return (
         <IonPage>
             <IonContent>
@@ -26,12 +36,21 @@ const AuthPage: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonInput type="email" placeholder="Email"></IonInput>
+                                <IonInput
+                                    type="email"
+                                    placeholder="Email"
+                                    value={email}
+                                    onIonChange={(e) => setEmail(e.detail.value!)}
+                                ></IonInput>
                             </IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonInput type="password" placeholder="Mot de passe"></IonInput>
+                                <IonInput
+                                    type="password"
+                                    placeholder="Mot de passe"
+                                    ref={passwordRef} // Utilisation de la référence pour le champ de mot de passe
+                                ></IonInput>
                             </IonCol>
                         </IonRow>
                         <IonRow>
@@ -41,7 +60,7 @@ const AuthPage: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonButton expand="block">Se connecter</IonButton>
+                                <IonButton expand="block" onClick={handleLogin}>Se connecter</IonButton>
                             </IonCol>
                         </IonRow>
                         <IonRow>
