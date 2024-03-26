@@ -48,7 +48,7 @@ const AuthPage: React.FC = () => {
                                 <IonInput
                                     type="password"
                                     placeholder="Mot de passe"
-                                    ref={passwordRef} // Utilisation de la référence pour le champ de mot de passe
+                                    ref={passwordRef}
                                 ></IonInput>
                             </IonCol>
                         </IonRow>
