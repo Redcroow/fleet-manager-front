@@ -15,7 +15,6 @@ const ForgotPage: React.FC = () => {
     const emailRef = useRef<HTMLIonInputElement>(null);
 
     const handleSendEmail = () => {
-        // Récupérer la valeur de l'e-mail à partir de la référence de l'élément IonInput
         const emailValue = emailRef.current?.value;
         console.log('Email envoyé : ', emailValue);
     };
@@ -36,7 +35,7 @@ const ForgotPage: React.FC = () => {
                                 <IonInput
                                     type="email"
                                     placeholder="Email"
-                                    ref={emailRef} // Référence à l'élément IonInput
+                                    ref={emailRef}
                                 ></IonInput>
                             </IonCol>
                         </IonRow>

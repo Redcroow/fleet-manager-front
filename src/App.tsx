@@ -3,7 +3,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
-import AuthPage from './pages/Auth/Auth'; 
+import AuthPage from './pages/Auth/Auth';
 import ForgotPage from './pages/ForgotPassword/ForgotPassword'
 
 /* Core CSS required for Ionic components to work properly */
