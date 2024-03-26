@@ -15,11 +15,10 @@ import './Auth.scss';
 
 const AuthPage: React.FC = () => {
     const [email, setEmail] = useState('');
-    const passwordRef = useRef<HTMLIonInputElement>(null); // Utilisation d'une référence pour le champ de mot de passe
+    const passwordRef = useRef<HTMLIonInputElement>(null);
 
     const handleLogin = () => {
-        // Utiliser les valeurs de l'email et du mot de passe ici
-        const enteredPassword = passwordRef.current?.value || ''; // Obtenir la valeur actuelle du champ de mot de passe
+        const enteredPassword = passwordRef.current?.value || '';
         console.log('Email: ', email);
         console.log('Mot de passe: ', enteredPassword);
     };
