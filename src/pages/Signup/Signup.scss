@@ -1,0 +1,10 @@
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0 10px 0 10px;
+}
+.white-button {
+    --ion-color-light: white !important
+}
