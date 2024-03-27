@@ -49,7 +49,7 @@ const App: React.FC = () => (
           <InfosPage />
         </Route>
         <Route exact path="/">
-          <Redirect to="/home" />
+          <Redirect to="/auth" />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
