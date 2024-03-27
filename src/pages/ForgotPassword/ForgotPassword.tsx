@@ -7,9 +7,11 @@ import {
     IonGrid,
     IonRow,
     IonCol,
+    IonIcon,
 } from '@ionic/react';
 
 import './ForgotPassword.scss';
+import { arrowBack } from 'ionicons/icons';
 
 const ForgotPage: React.FC = () => {
     const emailRef = useRef<HTMLIonInputElement>(null);
@@ -42,6 +44,14 @@ const ForgotPage: React.FC = () => {
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
                                 <IonButton expand="block" onClick={handleSendEmail}>Envoyer</IonButton>
+                            </IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol>
+                                <IonButton fill="clear" color="light" onClick={() => window.history.back()} className="white-button">
+                                    <IonIcon icon={arrowBack} slot="start" />
+                                    Retour
+                                </IonButton>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
