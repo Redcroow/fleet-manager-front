@@ -8,7 +8,8 @@ import {
     IonGrid,
     IonRow,
     IonCol,
-    IonRouterLink
+    IonRouterLink,
+    IonImg
 } from '@ionic/react';
 
 import './Auth.scss';
@@ -30,7 +31,7 @@ const AuthPage: React.FC = () => {
                     <IonGrid>
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
-                                <img src="src/theme/Assets/fleetmanager-white-logo.png" alt="Logo" />
+                                <IonImg src="src/assets/images/fleetmanager-white-logo.png" alt="Logo" />
                             </IonCol>
                         </IonRow>
                         <IonRow>

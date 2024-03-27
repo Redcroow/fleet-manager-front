@@ -10,7 +10,8 @@ import {
     IonCol,
     IonRouterLink,
     IonIcon,
-    IonProgressBar
+    IonProgressBar,
+    IonImg
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
@@ -44,7 +45,7 @@ const SignupPage: React.FC = () => {
                     <IonGrid>
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
-                                <img src="src/theme/Assets/fleetmanager-white-logo.png" alt="Logo" />
+                                <IonImg src="src/assets/images/fleetmanager-white-logo.png" alt="Logo" />
                             </IonCol>
                         </IonRow>
                         <IonRow>
