@@ -1,27 +1,22 @@
-import React, { useRef } from 'react';
-import {
-    IonPage,
-    IonContent,
-    IonInput,
-    IonButton,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonIcon,
-} from '@ionic/react';
+import React from 'react';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonButton, IonIcon } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-
-import './ForgotPassword.scss';
 import { arrowBack } from 'ionicons/icons';
+import './Infos.scss';
 
-const ForgotPage: React.FC = () => {
-    const emailRef = useRef<HTMLIonInputElement>(null);
+const InfosPage: React.FC = () => {
+    const hasRole = false;
+    const hasCar = false;
     const history = useHistory();
 
-    const handleSendEmail = () => {
-        const emailValue = emailRef.current?.value;
-        console.log('Email envoyé : ', emailValue);
-    };
+    let message = '';
+    if (!hasRole && !hasCar) {
+        message = 'Vous n\'avez pas encore de rôle défini et de voiture attribuée, veuillez en informer votre RH.';
+    } else if (!hasRole) {
+        message = 'Vous n\'avez pas encore de rôle défini, veuillez en informer votre RH.';
+    } else if (!hasCar) {
+        message = 'Vous n\'avez pas encore de voiture attribuée, veuillez en informer votre RH.';
+    }
 
     const handleBack = () => {
         history.push('/auth');
@@ -30,26 +25,21 @@ const ForgotPage: React.FC = () => {
     return (
         <IonPage>
             <IonContent>
-                <div className="forgot-password-container">
+                <div className="infos-container">
                     <IonGrid>
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
-                                <h1>Réinitialisation du mot de passe</h1>
-                                <p>Veuillez saisir votre adresse e-mail pour réinitialiser votre mot de passe.</p>
+                                <img src="src/theme/Assets/fleetmanager-white-logo.png" alt="Logo" />
                             </IonCol>
                         </IonRow>
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
-                                <IonInput
-                                    type="email"
-                                    placeholder="Email"
-                                    ref={emailRef}
-                                ></IonInput>
+                                <p>{message}</p>
                             </IonCol>
                         </IonRow>
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
-                                <IonButton expand="block" onClick={handleSendEmail}>Envoyer</IonButton>
+                                <IonButton expand="block">Alerter la RH</IonButton>
                             </IonCol>
                         </IonRow>
                         <IonRow>
@@ -67,4 +57,4 @@ const ForgotPage: React.FC = () => {
     );
 };
 
-export default ForgotPage;
+export default InfosPage;
