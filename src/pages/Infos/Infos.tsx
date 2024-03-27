@@ -1,20 +1,13 @@
 import React from 'react';
-import {
-    IonPage,
-    IonContent,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonButton,
-    IonIcon
-} from '@ionic/react';
-
+import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonButton, IonIcon } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
 import './Infos.scss';
 
 const InfosPage: React.FC = () => {
     const hasRole = false;
     const hasCar = false;
+    const history = useHistory();
 
     let message = '';
     if (!hasRole && !hasCar) {
@@ -24,6 +17,10 @@ const InfosPage: React.FC = () => {
     } else if (!hasCar) {
         message = 'Vous n\'avez pas encore de voiture attribuée, veuillez en informer votre RH.';
     }
+
+    const handleBack = () => {
+        history.push('/auth');
+    };
 
     return (
         <IonPage>
@@ -47,7 +44,7 @@ const InfosPage: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonButton fill="clear" color="light" onClick={() => window.history.back()} className="white-button">
+                                <IonButton fill="clear" color="light" onClick={handleBack} className="white-button">
                                     <IonIcon icon={arrowBack} slot="start" />
                                     Retour
                                 </IonButton>

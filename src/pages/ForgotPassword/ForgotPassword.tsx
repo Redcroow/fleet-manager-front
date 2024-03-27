@@ -9,16 +9,22 @@ import {
     IonCol,
     IonIcon,
 } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 
 import './ForgotPassword.scss';
 import { arrowBack } from 'ionicons/icons';
 
 const ForgotPage: React.FC = () => {
     const emailRef = useRef<HTMLIonInputElement>(null);
+    const history = useHistory();
 
     const handleSendEmail = () => {
         const emailValue = emailRef.current?.value;
         console.log('Email envoyé : ', emailValue);
+    };
+
+    const handleBack = () => {
+        history.push('/auth');
     };
 
     return (
@@ -48,7 +54,7 @@ const ForgotPage: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonButton fill="clear" color="light" onClick={() => window.history.back()} className="white-button">
+                                <IonButton fill="clear" color="light" onClick={handleBack} className="white-button">
                                     <IonIcon icon={arrowBack} slot="start" />
                                     Retour
                                 </IonButton>

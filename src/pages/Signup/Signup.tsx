@@ -12,7 +12,7 @@ import {
     IonIcon,
     IonProgressBar
 } from '@ionic/react';
-
+import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
 import './Signup.scss';
 
@@ -23,13 +23,18 @@ const SignupPage: React.FC = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const history = useHistory();
+    
     const handleNextStep = () => {
         if (step === 1) {
             setStep(2);
         } else {
             console.log('Informations de l\'utilisateur : ', { firstName, lastName, phoneNumber, email, password });
         }
+    };
+
+    const handleBack = () => {
+        history.push('/auth');
     };
 
     return (
@@ -113,7 +118,7 @@ const SignupPage: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonButton fill="clear" color="light" onClick={() => window.history.back()} className="white-button">
+                                <IonButton fill="clear" color="light" onClick={handleBack} className="white-button">
                                     <IonIcon icon={arrowBack} slot="start" />
                                     Retour
                                 </IonButton>
