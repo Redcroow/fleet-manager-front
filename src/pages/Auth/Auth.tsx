@@ -25,12 +25,9 @@ const AuthPage: React.FC = () => {
     const handleLogin = async () => {
         const enteredPassword = passwordRef.current?.value || '';
         const enteredPass = enteredPassword.toString();
-        console.log('Email: ', email);
-        console.log('Mot de passe: ', enteredPass);
         try {
             const userData = await loginUser(email, enteredPass);
             console.log('Utilisateur connecté : ', userData);
-            history.push('/homepage-admin');
         } catch (error) {
             console.error('Erreur lors de la connexion : ', error);
         }
