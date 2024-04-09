@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import {
     IonPage,
     IonContent,
@@ -12,16 +13,42 @@ import {
     IonImg
 } from '@ionic/react';
 
+import { loginUser } from './../../api/auth/login';
 import './Auth.scss';
+import { useHistory } from 'react-router-dom';
+
+interface DecodedUserToken {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    position: string;
+}
 
 const AuthPage: React.FC = () => {
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const passwordRef = useRef<HTMLIonInputElement>(null);
+    const history = useHistory();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         const enteredPassword = passwordRef.current?.value || '';
-        console.log('Email: ', email);
-        console.log('Mot de passe: ', enteredPassword);
+        const enteredPass = enteredPassword.toString();
+        try {
+            const userData = await loginUser(email, enteredPass);
+            if (userData.access_token) {
+                const decoded: DecodedUserToken = jwtDecode(userData.access_token);
+                if(decoded.position === "RH") {
+                    history.push('/homepage-admin');
+                }else if(decoded.position === "Employee") {
+                    console.log('test');
+                }else {
+                    history.push(`/infos?position=${decoded.position}`);
+                }
+            }
+        } catch (error) {
+            console.error('Erreur lors de la connexion : ', error);
+        }
     };
 
     return (
@@ -49,6 +76,8 @@ const AuthPage: React.FC = () => {
                                 <IonInput
                                     type="password"
                                     placeholder="Mot de passe"
+                                    value={password}
+                                    onIonChange={(e) => setPassword(e.detail.value!)}
                                     ref={passwordRef}
                                 ></IonInput>
                             </IonCol>

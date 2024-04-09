@@ -2,20 +2,18 @@ import React from 'react';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonButton, IonIcon, IonImg } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
+import { useLocation } from 'react-router-dom';
 import './Infos.scss';
 
 const InfosPage: React.FC = () => {
-    const hasRole = false;
-    const hasCar = false;
     const history = useHistory();
-
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const position = searchParams.get('position');
+    
     let message = '';
-    if (!hasRole && !hasCar) {
-        message = 'Vous n\'avez pas encore de rôle défini et de voiture attribuée, veuillez en informer votre RH.';
-    } else if (!hasRole) {
-        message = 'Vous n\'avez pas encore de rôle défini, veuillez en informer votre RH.';
-    } else if (!hasCar) {
-        message = 'Vous n\'avez pas encore de voiture attribuée, veuillez en informer votre RH.';
+    if (!position) {
+        message = 'Vous n\'avez pas encore de roles attribuée, veuillez en informer votre RH.';
     }
 
     const handleBack = () => {
