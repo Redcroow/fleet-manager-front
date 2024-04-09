@@ -2,15 +2,13 @@ import React from 'react';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonButton, IonIcon, IonImg } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
-import { useLocation } from 'react-router-dom';
 import './Infos.scss';
 
 const InfosPage: React.FC = () => {
     const history = useHistory();
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const position = searchParams.get('position');
     
+    const position = localStorage.getItem('position');
+
     let message = '';
     if (!position) {
         message = 'Vous n\'avez pas encore de roles attribuée, veuillez en informer votre RH.';

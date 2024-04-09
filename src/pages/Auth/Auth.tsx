@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import {
     IonPage,
@@ -31,19 +31,35 @@ const AuthPage: React.FC = () => {
     const passwordRef = useRef<HTMLIonInputElement>(null);
     const history = useHistory();
 
+
+    useEffect(() => {
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            const decoded: DecodedUserToken = jwtDecode(token);
+            if (decoded.position === "RH") {
+                history.push('/homepage-admin');
+            } else if (decoded.position === "Employee") {
+                // Gérer la redirection
+            } else {
+                history.push('/infos');
+            }
+        }
+    }, []);
+
     const handleLogin = async () => {
         const enteredPassword = passwordRef.current?.value || '';
         const enteredPass = enteredPassword.toString();
         try {
             const userData = await loginUser(email, enteredPass);
             if (userData.access_token) {
+                localStorage.setItem('access_token', userData.access_token);
                 const decoded: DecodedUserToken = jwtDecode(userData.access_token);
-                if(decoded.position === "RH") {
+                if (decoded.position === "RH") {
                     history.push('/homepage-admin');
-                }else if(decoded.position === "Employee") {
-                    console.log('test');
-                }else {
-                    history.push(`/infos?position=${decoded.position}`);
+                } else if (decoded.position === "Employee") {
+                    // Gérer la redirection
+                } else {
+                    history.push('/infos');
                 }
             }
         } catch (error) {
