@@ -8,7 +8,7 @@
 
 ## Installation
 -  Extension Ionic : 
-  -  Build 
-  -  Sync
+  --  Build 
+  --  Sync
 
 -  Android studio : https://developer.android.com/studio?hl=fr
