@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     IonPage,
     IonContent,
@@ -24,13 +24,15 @@ const SignupPage: React.FC = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const passwordRef = useRef<HTMLIonInputElement>(null);
     const history = useHistory();
     
     const handleNextStep = () => {
         if (step === 1) {
             setStep(2);
         } else {
-            console.log('Informations de l\'utilisateur : ', { firstName, lastName, phoneNumber, email, password });
+            const enteredPassword = passwordRef.current?.value || '';
+            console.log('Informations de l\'utilisateur : ', { firstName, lastName, phoneNumber, email, enteredPassword });
         }
     };
 
@@ -100,6 +102,7 @@ const SignupPage: React.FC = () => {
                                             placeholder="Mot de passe"
                                             value={password}
                                             onIonChange={(e) => setPassword(e.detail.value!)}
+                                            ref={passwordRef}
                                         ></IonInput>
                                     </IonCol>
                                 </IonRow>
