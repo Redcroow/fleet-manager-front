@@ -3,13 +3,13 @@
 ## Require 
 -  Node version : += v20.11.0
 -  Npm version : += 6.14.17
--  Phone device : Pixel 8PRO
--  Android studio
+-  Emulator Phone device : += Pixel 8PRO
+-  Android studio last version
 
 
 ## Installation
-- [Extension Ionic VSCode]([https://ionicframework.com/docs/cli](https://ionicframework.com/docs/intro/vscode-extension)):
+- [Extension Ionic VSCode](https://ionicframework.com/docs/intro/vscode-extension):
   - Pour construire (build) et synchroniser (sync) l'application avec les commandes Ionic CLI appropriées.
+  - Pour démarrer localement soit en version Web soit sous Android (pas d'ios de créer).
 
-- [Android Studio](https://developer.android.com/studio?hl=fr): 
-  - Pour le développement d'applications Android.
+- [Android Studio](https://developer.android.com/studio?hl=fr)
