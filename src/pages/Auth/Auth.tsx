@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import {
     IonPage,
     IonContent,
@@ -16,6 +17,14 @@ import { loginUser } from './../../api/auth/login';
 import './Auth.scss';
 import { useHistory } from 'react-router-dom';
 
+interface DecodedUserToken {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    position: string;
+}
+
 const AuthPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -27,7 +36,16 @@ const AuthPage: React.FC = () => {
         const enteredPass = enteredPassword.toString();
         try {
             const userData = await loginUser(email, enteredPass);
-            console.log('Utilisateur connecté : ', userData);
+            if (userData.access_token) {
+                const decoded: DecodedUserToken = jwtDecode(userData.access_token);
+                if(decoded.position === "RH") {
+                    history.push('/homepage-admin');
+                }else if(decoded.position === "Employee") {
+                    console.log('test');
+                }else {
+                    history.push(`/infos?position=${decoded.position}`);
+                }
+            }
         } catch (error) {
             console.error('Erreur lors de la connexion : ', error);
         }

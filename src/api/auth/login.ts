@@ -1,27 +1,24 @@
 export async function loginUser(email: string, password: string): Promise<any> {
 
     try {
-        console.log(email)
-        console.log(password)
-        const response = await fetch('http://fleetmanager-api.com/auth/login', {
+        const response = await fetch('https://0a7b-81-255-86-73.ngrok-free.app/auth/login', {
             method: 'POST',
             body: JSON.stringify({ email, password }),
             headers: {
                 'Content-Type': 'application/json',
-                'accept': '*/*'
+                'Accept': '*/*'
             }
         });
-        console.log(response)
+        
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Failed to login: ${errorMessage}`);
+        }
 
-        // if (response.ok) {
-        //     const userData = await response.json();
-        //     return userData;
-        // } else {
-        //     throw new Error('Échec de l\'authentification');
-        // }
-
+        const userData = await response.json();
+        return userData;
     } catch (error) {
-        console.error('Erreur lors de l\'authentification : ', error);
+        console.error('Error during login:', error);
         throw error;
     }
 }
