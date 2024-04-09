@@ -8,7 +8,7 @@
 
 
 ## Installation
-- [Extension Ionic VSCode](https://ionicframework.com/docs/intro/vscode-extension):
+- [Extension Ionic VSCode](https://ionicframework.com/docs/intro/vscode-extension) :
   - Pour construire (build) et synchroniser (sync) l'application avec les commandes Ionic CLI appropriées.
   - Pour démarrer localement soit en version Web soit sous Android (pas d'ios de créer).
 
