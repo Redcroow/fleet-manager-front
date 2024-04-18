@@ -1,12 +1,16 @@
+// Dans Infos.tsx
 import React, { useEffect } from 'react';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonButton, IonIcon, IonImg } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import { arrowBack } from 'ionicons/icons';
 import './Infos.scss';
 
 const InfosPage: React.FC = () => {
     const history = useHistory();
-    
+    const hasCar = localStorage.getItem('hasCar');
+    const position = localStorage.getItem('position');
+
+    console.log(localStorage)
+
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         if (!token) {
@@ -15,15 +19,18 @@ const InfosPage: React.FC = () => {
     }, [history]);
 
     const handleLogout = () => {
-        localStorage.removeItem('access_token');
+        localStorage.clear();
         history.replace('/auth');
     };
 
-    const position = localStorage.getItem('position');
-
-    let message = '';
+    let messagePosition = '';
+    let messageCar = '';
     if (!position) {
-        message = 'Vous n\'avez pas encore de rôles attribués, veuillez en informer votre RH.';
+        messagePosition = 'Vous n\'avez pas encore de rôles attribués, veuillez en informer votre RH.';
+    }
+
+    if (hasCar) {
+        messageCar = 'Vous n\'avez pas encore de voiture attribués, veuillez en informer votre RH.';
     }
 
     return (
@@ -38,7 +45,8 @@ const InfosPage: React.FC = () => {
                         </IonRow>
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
-                                <p>{message}</p>
+                                <p>{messagePosition}</p>
+                                <p>{messageCar}</p>
                             </IonCol>
                         </IonRow>
                         <IonRow className="ion-justify-content-center">

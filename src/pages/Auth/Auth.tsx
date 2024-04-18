@@ -60,6 +60,7 @@ const AuthPage: React.FC = () => {
 
                 localStorage.setItem('access_token', userData.access_token);
                 const decoded: DecodedUserToken = jwtDecode(userData.access_token);
+                localStorage.setItem('position', decoded.position);
 
                 if (decoded.position === "RH") {
                     history.push('/homepage-admin');
@@ -67,7 +68,18 @@ const AuthPage: React.FC = () => {
                 } else if (decoded.position === "Employee") {
                     try {
                         const carData = await getCarAll(userData.access_token);
-                        console.log("car", carData);
+
+                        if (carData) {
+                            const hasCar = carData.some((car: any) => car.assignedEmployeeId === decoded.id);
+                            localStorage.setItem('hasCar', hasCar.toString());
+
+                            if (hasCar) {
+                                history.push('/homepage-employee');
+                                
+                            } else {
+                                history.push('/infos');
+                            }
+                        }      
                     } catch (error) {
                         console.error('Erreur lors de la récupération des données de voiture : ', error);
                     }
