@@ -1,11 +1,12 @@
-export async function getCarAll(): Promise<any> {
-
+export async function getCarAll(accessToken: string): Promise<any> {
     try {
         const response = await fetch('https://6e6e-2a02-8428-8440-f501-1fad-eb-9652-b896.ngrok-free.app/car', {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': '*/*'
+                'Accept': '*/*',
+                'Authorization': `Bearer ${accessToken}`,
+                // a enlever quand l'api sera en ligne
+                "ngrok-skip-browser-warning": "69420"
             }
         });
 

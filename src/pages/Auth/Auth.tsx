@@ -55,19 +55,22 @@ const AuthPage: React.FC = () => {
         const enteredPass = enteredPassword.toString();
         try {
             const userData = await loginUser(email, enteredPass);
+
             if (userData.access_token) {
+
                 localStorage.setItem('access_token', userData.access_token);
                 const decoded: DecodedUserToken = jwtDecode(userData.access_token);
+
                 if (decoded.position === "RH") {
                     history.push('/homepage-admin');
+
                 } else if (decoded.position === "Employee") {
-                    // const carData = await getCarAll();
-                    // const hasCar = carData.some((car: any) => car.assignedEmployeeId === decoded.id);
-                    // if (hasCar) {
-                        history.push('/homepage-employee');
-                    // } else {
-                    //     history.push('/infos');
-                    // }
+                    try {
+                        const carData = await getCarAll(userData.access_token);
+                        console.log("car", carData);
+                    } catch (error) {
+                        console.error('Erreur lors de la récupération des données de voiture : ', error);
+                    }
                 } else {
                     history.push('/infos');
                 }
@@ -76,6 +79,7 @@ const AuthPage: React.FC = () => {
             console.error('Erreur lors de la connexion : ', error);
         }
     };
+    
 
     return (
         <IonPage>
