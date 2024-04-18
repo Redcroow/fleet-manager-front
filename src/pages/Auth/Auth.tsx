@@ -37,23 +37,22 @@ const AuthPage: React.FC = () => {
         const token = localStorage.getItem('access_token');
         if (token) {
             const decoded: DecodedUserToken = jwtDecode(token);
+            // Récupération de toutes les voitures
+            getCarAll()
+                .then((carData) => {
+                    console.log(carData)
+                })
+                .catch((error) => console.error('Erreur lors de la récupération des voitures : ', error));
             if (decoded.position === "RH") {
                 history.push('/homepage-admin');
             } else if (decoded.position === "Employee") {
-                console.log('vous etes connecté employer attend')
+                console.log('vous etes connecté employé, attente...');
             } else {
-                history.push('/infos');
+
             }
         }
     }, []);
-    // const handleCar = async () => {
-    //     try{
-    //         const getAllCar = await getCarAll();
-    //         console.log(getAllCar)
-    //     }catch(error) {
 
-    //     }
-    // }
     const handleLogin = async () => {
         const enteredPassword = passwordRef.current?.value || '';
         const enteredPass = enteredPassword.toString();
@@ -65,9 +64,9 @@ const AuthPage: React.FC = () => {
                 if (decoded.position === "RH") {
                     history.push('/homepage-admin');
                 } else if (decoded.position === "Employee") {
-                    console.log('vous etes connecté employer attend')
+                    console.log('vous etes connecté employé, attente...');
                 } else {
-                    history.push('/infos');
+                    
                 }
             }
         } catch (error) {

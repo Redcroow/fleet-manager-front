@@ -1,7 +1,7 @@
 export async function getCarAll(): Promise<any> {
 
     try {
-        const response = await fetch('https://0a7b-81-255-86-73.ngrok-free.app/car', {
+        const response = await fetch('https://6e6e-2a02-8428-8440-f501-1fad-eb-9652-b896.ngrok-free.app/car', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,16 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import './HomepageAdmin.scss';
 import HeaderAdmin from '../../components/Header/Admin/HeaderAdmin';
 import HomepageCard from '../../components/HomepageCard/HomepageCard';
+import { jwtDecode } from 'jwt-decode';
 
 const HomepageAdmin: React.FC = () => {
   const history = useHistory();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      if (decodedToken.position === "Admin") {
+        setIsAdmin(true);
+      } else {
+        history.push('/');
+      }
+    } else {
+      history.push('/auth');
+    }
+  }, [history]);
 
   const navigateToPage = (page: string) => {
     history.push(`/${page}`);
   };
+
+  if (!isAdmin) {
+    return null;
+  }
 
   return (
     <IonPage>
