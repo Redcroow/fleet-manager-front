@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonButton, IonIcon, IonImg } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
@@ -7,16 +7,24 @@ import './Infos.scss';
 const InfosPage: React.FC = () => {
     const history = useHistory();
     
+    useEffect(() => {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            history.replace('/auth');
+        }
+    }, [history]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('access_token');
+        history.replace('/auth');
+    };
+
     const position = localStorage.getItem('position');
 
     let message = '';
     if (!position) {
-        message = 'Vous n\'avez pas encore de roles attribuée, veuillez en informer votre RH.';
+        message = 'Vous n\'avez pas encore de rôles attribués, veuillez en informer votre RH.';
     }
-
-    const handleBack = () => {
-        history.push('/auth');
-    };
 
     return (
         <IonPage>
@@ -40,9 +48,8 @@ const InfosPage: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonButton fill="clear" color="light" onClick={handleBack} className="white-button">
-                                    <IonIcon icon={arrowBack} slot="start" />
-                                    Retour
+                                <IonButton fill="clear" color="light" onClick={handleLogout} className="white-button">
+                                    Déconnexion
                                 </IonButton>
                             </IonCol>
                         </IonRow>

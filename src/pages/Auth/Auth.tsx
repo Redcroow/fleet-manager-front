@@ -14,6 +14,7 @@ import {
 } from '@ionic/react';
 
 import { loginUser } from './../../api/auth/login';
+import { getCarAll } from './../../api/car/getCar';
 import './Auth.scss';
 import { useHistory } from 'react-router-dom';
 
@@ -39,13 +40,20 @@ const AuthPage: React.FC = () => {
             if (decoded.position === "RH") {
                 history.push('/homepage-admin');
             } else if (decoded.position === "Employee") {
-                // Gérer la redirection
+                console.log('vous etes connecté employer attend')
             } else {
                 history.push('/infos');
             }
         }
     }, []);
+    // const handleCar = async () => {
+    //     try{
+    //         const getAllCar = await getCarAll();
+    //         console.log(getAllCar)
+    //     }catch(error) {
 
+    //     }
+    // }
     const handleLogin = async () => {
         const enteredPassword = passwordRef.current?.value || '';
         const enteredPass = enteredPassword.toString();
@@ -57,7 +65,7 @@ const AuthPage: React.FC = () => {
                 if (decoded.position === "RH") {
                     history.push('/homepage-admin');
                 } else if (decoded.position === "Employee") {
-                    // Gérer la redirection
+                    console.log('vous etes connecté employer attend')
                 } else {
                     history.push('/infos');
                 }

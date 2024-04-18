@@ -1,6 +1,5 @@
-// HeaderAdmin.tsx
 import './HeaderAdmin.scss';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     IonHeader,
     IonToolbar,
@@ -15,15 +14,25 @@ import {
     IonImg
 } from '@ionic/react';
 import { personCircleOutline, logOutOutline } from 'ionicons/icons';
+import { useHistory } from 'react-router-dom';
 
 interface ContainerProps { }
 
 const HeaderAdmin: React.FC<ContainerProps> = () => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [popoverEvent, setPopoverEvent] = useState<Event | undefined>(undefined);
+    const history = useHistory();
+
+    useEffect(() => {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            history.replace('/auth');
+        }
+    }, [history]);
 
     const handleLogout = () => {
-        console.log("Déconnexion en cours...");
+        localStorage.removeItem('access_token');
+        history.replace('/auth');
     };
 
     const openProfileMenu = (e: React.MouseEvent) => {
