@@ -60,7 +60,7 @@ const AuthPage: React.FC = () => {
 
                 localStorage.setItem('access_token', userData.access_token);
                 const decoded: DecodedUserToken = jwtDecode(userData.access_token);
-                localStorage.setItem('position', decoded.position);
+                localStorage.setItem('userData', JSON.stringify(decoded));
 
                 if (decoded.position === "RH") {
                     history.push('/homepage-admin');

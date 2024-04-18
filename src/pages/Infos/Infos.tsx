@@ -7,9 +7,16 @@ import './Infos.scss';
 const InfosPage: React.FC = () => {
     const history = useHistory();
     const hasCar = localStorage.getItem('hasCar');
-    const position = localStorage.getItem('position');
-
-    console.log(localStorage)
+    const userDataString = localStorage.getItem('userData');
+    
+    let userPosition = '';
+    let messagePosition = '';
+    let messageCar = '';
+    
+    if(userDataString) {
+        const userData = JSON.parse(userDataString);
+        userPosition = userData.position;
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
@@ -23,9 +30,7 @@ const InfosPage: React.FC = () => {
         history.replace('/auth');
     };
 
-    let messagePosition = '';
-    let messageCar = '';
-    if (!position) {
+    if (!userPosition) {
         messagePosition = 'Vous n\'avez pas encore de rôles attribués, veuillez en informer votre RH.';
     }
 

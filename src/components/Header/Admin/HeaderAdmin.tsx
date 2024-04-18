@@ -21,7 +21,17 @@ interface ContainerProps { }
 const HeaderAdmin: React.FC<ContainerProps> = () => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [popoverEvent, setPopoverEvent] = useState<Event | undefined>(undefined);
+    const [userName, setUserName] = useState<string>('');
     const history = useHistory();
+
+    useEffect(() => {
+        const userDataString = localStorage.getItem('userData');
+        if (userDataString) {
+            const userData = JSON.parse(userDataString);
+            const fullName = `${userData.first_name} ${userData.last_name}`;
+            setUserName(fullName);
+        }
+    }, []);
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
@@ -65,7 +75,7 @@ const HeaderAdmin: React.FC<ContainerProps> = () => {
             >
                 <IonList>
                     <IonItem>
-                        <IonLabel>Faux Nom</IonLabel>
+                        <IonLabel>{userName}</IonLabel>
                     </IonItem>
                     <IonItem button onClick={handleLogout}>
                         <IonIcon slot="start" icon={logOutOutline} />
