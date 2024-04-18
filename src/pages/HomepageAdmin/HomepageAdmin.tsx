@@ -14,16 +14,16 @@ const HomepageAdmin: React.FC = () => {
     const token = localStorage.getItem('access_token');
     if (token) {
       const decodedToken: any = jwtDecode(token);
-      if (decodedToken.position === "Admin") {
+      if (decodedToken.position === "RH") {
         setIsAdmin(true);
       } else {
-        history.push('/');
+        history.push('/auth');
       }
     } else {
       history.push('/auth');
     }
   }, [history]);
-
+  
   const navigateToPage = (page: string) => {
     history.push(`/${page}`);
   };

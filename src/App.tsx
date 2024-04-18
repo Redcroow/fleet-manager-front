@@ -26,6 +26,7 @@ import './theme/variables.css';
 import SignupPage from './pages/Signup/Signup';
 import InfosPage from './pages/Infos/Infos';
 import HomepageAdmin from './pages/HomepageAdmin/HomepageAdmin';
+import HomepageEmployee from './pages/HompeageEmployee/HomepageEmployee';
 
 setupIonicReact();
 
@@ -47,6 +48,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/homepage-admin">
           <HomepageAdmin />
+        </Route>
+        <Route exact path="/homepage-employee">
+          <HomepageEmployee />
         </Route>
         <Route exact path="/">
           <Redirect to="/auth" />
