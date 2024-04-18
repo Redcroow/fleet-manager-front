@@ -8,7 +8,7 @@ export async function getCarAll(): Promise<any> {
                 'Accept': '*/*'
             }
         });
-        
+
         if (!response.ok) {
             const errorMessage = await response.text();
             throw new Error(`Failed to get car: ${errorMessage}`);

@@ -16,6 +16,7 @@ import {
 import { loginUser } from './../../api/auth/login';
 import './Auth.scss';
 import { useHistory } from 'react-router-dom';
+import { getCarAll } from '../../api/car/getCar';
 
 interface DecodedUserToken {
     id: number;
@@ -31,7 +32,6 @@ const AuthPage: React.FC = () => {
     const passwordRef = useRef<HTMLIonInputElement>(null);
     const history = useHistory();
 
-
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         if (token) {
@@ -39,9 +39,13 @@ const AuthPage: React.FC = () => {
             if (decoded.position === "RH") {
                 history.push('/homepage-admin');
             } else if (decoded.position === "Employee") {
-                history.push('/homepage-employee');
+                // if(hasCar) {
+                //     history.push('/homepage-employee');
+                // }else {
+                //     history.push('/infos');
+                // }
             } else {
-
+                history.push('/infos');
             }
         }
     }, []);
@@ -57,9 +61,15 @@ const AuthPage: React.FC = () => {
                 if (decoded.position === "RH") {
                     history.push('/homepage-admin');
                 } else if (decoded.position === "Employee") {
-                    history.push('/homepage-employee');
+                    // const carData = await getCarAll();
+                    // const hasCar = carData.some((car: any) => car.assignedEmployeeId === decoded.id);
+                    // if (hasCar) {
+                        history.push('/homepage-employee');
+                    // } else {
+                    //     history.push('/infos');
+                    // }
                 } else {
-                    
+                    history.push('/infos');
                 }
             }
         } catch (error) {
