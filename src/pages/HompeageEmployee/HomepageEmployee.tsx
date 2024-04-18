@@ -22,7 +22,7 @@ const HomepageEmployee: React.FC = () => {
   }, [history]);
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token');
+    localStorage.clear();
     history.push('/auth');
   };
 

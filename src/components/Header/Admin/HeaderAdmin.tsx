@@ -31,7 +31,7 @@ const HeaderAdmin: React.FC<ContainerProps> = () => {
     }, [history]);
 
     const handleLogout = () => {
-        localStorage.removeItem('access_token');
+        localStorage.clear();
         history.replace('/auth');
     };
 
