@@ -29,6 +29,7 @@ import HomepageAdmin from './pages/HomepageAdmin/HomepageAdmin';
 import HomepageEmployee from './pages/HomepageEmployee/HomepageEmployee';
 import MyFleetPage from './pages/MyFleet/MyFleet';
 import MyProfile from './pages/MyProfile/MyProfile';
+import DeclarationPage from './pages/Declaration/Declaration';
 
 setupIonicReact();
 
@@ -59,6 +60,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/my-profile">
           <MyProfile />
+        </Route>
+        <Route exact path="/declaration">
+          <DeclarationPage />
         </Route>
         <Route exact path="/">
           <Redirect to="/auth" />
