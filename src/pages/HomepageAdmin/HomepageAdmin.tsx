@@ -36,7 +36,7 @@ const HomepageAdmin: React.FC = () => {
     <IonPage>
       <HeaderAdmin />
       <IonContent>
-        <div className="homepage-container">
+        <div className="homepage-admin-container">
           <IonGrid>
             <IonRow>
               <IonCol size="12" size-md="4">
