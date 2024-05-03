@@ -33,6 +33,14 @@ const HeaderEmployee = () => {
         history.push('/my-profile');
         setShowPopover(false);
     };
+    const goToMyHistory = () => {
+        history.push('/my-history');
+        setShowPopover(false);
+    };
+    const goToDeclaration = () => {
+        history.push('/declaration');
+        setShowPopover(false);
+    };
 
     return (
         <IonHeader>
@@ -52,11 +60,11 @@ const HeaderEmployee = () => {
                         <IonIcon slot="start" icon={personCircleOutline} />
                         <IonLabel>Mon Profil</IonLabel>
                     </IonItem>
-                    <IonItem button onClick={() => console.log('Mon Historique')} disabled={isMyHistoryActive}>
+                    <IonItem button onClick={goToMyHistory} disabled={isMyHistoryActive}>
                         <IonIcon slot="start" icon={bookOutline} />
                         <IonLabel>Mon Historique</IonLabel>
                     </IonItem>
-                    <IonItem button onClick={() => console.log('Déclarer')} disabled={isDeclarationActive}>
+                    <IonItem button onClick={goToDeclaration} disabled={isDeclarationActive}>
                         <IonIcon slot="start" icon={warningOutline} />
                         <IonLabel>Déclarer</IonLabel>
                     </IonItem>
