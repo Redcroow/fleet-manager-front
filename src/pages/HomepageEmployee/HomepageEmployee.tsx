@@ -6,17 +6,14 @@ const HomepageEmployee: React.FC = () => {
   const [isVideoPlayed, setIsVideoPlayed] = useState(false);
 
   useEffect(() => {
-    // Vérifier si le cookie indique que la vidéo a déjà été jouée dans cette session
     const isVideoPlayedInSession = sessionStorage.getItem('isVideoPlayed');
     if (isVideoPlayedInSession === 'true') {
       setIsVideoPlayed(true);
     } else {
-      // La vidéo n'a pas encore été jouée dans cette session, donc la jouer
       const videoElement = document.getElementById('presentation-video') as HTMLVideoElement;
 
       const handleVideoEnd = () => {
         setIsVideoPlayed(true);
-        // Enregistrer dans le cookie que la vidéo a été jouée dans cette session
         sessionStorage.setItem('isVideoPlayed', 'true');
       };
 

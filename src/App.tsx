@@ -26,7 +26,7 @@ import './theme/variables.css';
 import SignupPage from './pages/Signup/Signup';
 import InfosPage from './pages/Infos/Infos';
 import HomepageAdmin from './pages/HomepageAdmin/HomepageAdmin';
-import HomepageEmployee from './pages/HompeageEmployee/HomepageEmployee';
+import HomepageEmployee from './pages/HomepageEmployee/HomepageEmployee';
 import MyFleetPage from './pages/MyFleet/MyFleet';
 import MyProfile from './pages/MyProfile/MyProfile';
 
