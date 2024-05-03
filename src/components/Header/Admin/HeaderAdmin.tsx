@@ -59,7 +59,7 @@ const HeaderAdmin: React.FC<ContainerProps> = () => {
             <IonToolbar>
                 <IonTitle className="ion-text-center">Fleet Manager</IonTitle>
                 <IonButtons slot="start">
-                    <IonImg className="logo-img" src="src/assets/images/fleetmanager-white-logo.png" alt="Logo" />
+                    <IonImg className="header-logo-img" src="src/assets/images/fleetmanager-white-logo.png" alt="Logo" />
                 </IonButtons>
                 <IonButtons slot="end">
                     <IonButton onClick={openProfileMenu}>

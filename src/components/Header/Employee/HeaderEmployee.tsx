@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { IonHeader, IonButtons, IonButton, IonIcon, IonPopover, IonList, IonItem, IonLabel, IonImg } from '@ionic/react';
 import { menuOutline, personCircleOutline, logOutOutline, bookOutline, warningOutline } from 'ionicons/icons';
+import './HeaderEmployee.scss'
 
 const HeaderEmployee = () => {
     const history = useHistory();
@@ -24,6 +25,7 @@ const HeaderEmployee = () => {
     const handleLogout = () => {
         localStorage.clear();
         sessionStorage.clear();
+        setShowPopover(false);
         history.push('/auth');
     };
 
@@ -34,8 +36,8 @@ const HeaderEmployee = () => {
 
     return (
         <IonHeader>
-            <IonImg src="src/assets/images/banner.png" style={{ width: '100%', height: '100%' }} />
-            <IonButtons style={{ position: 'absolute', right: '0', top: '13px' }}>
+            <IonImg src="src/assets/images/banner.png" className='image-header-employee' />
+            <IonButtons className='button-header-employee'>
                 <IonButton onClick={openMenu}>
                     <IonIcon icon={menuOutline} size="large" />
                 </IonButton>

@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { IonPage, IonContent, IonIcon, IonInput, IonButton } from '@ionic/react';
-import { personOutline } from 'ionicons/icons';
+import { arrowBack, personOutline } from 'ionicons/icons';
 import HeaderEmployee from '../../components/Header/Employee/HeaderEmployee';
+import './MyProfile.scss';
+import { useHistory } from 'react-router-dom';
 
 const MyProfile: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -9,6 +11,7 @@ const MyProfile: React.FC = () => {
     const prenomRef = useRef<HTMLIonInputElement>(null);
     const emailRef = useRef<HTMLIonInputElement>(null);
     const telephoneRef = useRef<HTMLIonInputElement>(null);
+    const history = useHistory();
 
     const toggleEditing = () => {
         setIsEditing(!isEditing);
@@ -24,44 +27,52 @@ const MyProfile: React.FC = () => {
         console.log('Données enregistrées :', updatedFormData);
     };
 
+    const handleBack = () => {
+        history.push('/homepage-employee');
+    };
+
     return (
         <IonPage>
             <HeaderEmployee />
             <IonContent>
-                <div style={{ textAlign: 'center', marginBottom: '4em', marginTop: '4em' }}>
-                    <IonIcon icon={personOutline} style={{ fontSize: '10em' }} />
+                <div className='icon-profile-section'>
+                    <IonIcon icon={personOutline} className='user-profile-icon' />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <div className='input-profile-group'>
                     <IonInput
                         placeholder="Nom"
-                        style={{ width: '90%', border: '1px solid #ccc', borderRadius: '5px', marginBottom: '2em' }}
+                        className='profile-input'
                         disabled={!isEditing}
                         ref={nomRef}
                     />
                     <IonInput
                         placeholder="Prénom"
-                        style={{ width: '90%', border: '1px solid #ccc', borderRadius: '5px', marginBottom: '2em' }}
+                        className='profile-input'
                         disabled={!isEditing}
                         ref={prenomRef}
                     />
                     <IonInput
                         placeholder="Adresse email"
-                        style={{ width: '90%', border: '1px solid #ccc', borderRadius: '5px', marginBottom: '2em' }}
+                        className='profile-input'
                         disabled={!isEditing}
                         ref={emailRef}
                     />
                     <IonInput
                         placeholder="Numéro de téléphone"
-                        style={{ width: '90%', border: '1px solid #ccc', borderRadius: '5px', marginBottom: '4em' }}
+                        className='profile-input'
                         disabled={!isEditing}
                         ref={telephoneRef}
                     />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                    <IonButton onClick={isEditing ? handleSave : toggleEditing} style={{ width: '50%'}}>
+                <div className='input-profile-group'>
+                    <IonButton onClick={isEditing ? handleSave : toggleEditing} className='profile-button'>
                         {isEditing ? "Enregistrer" : "Modifier"}
                     </IonButton>
                 </div>
+                <IonButton fill="clear" color="light" onClick={handleBack} className="white-button">
+                    <IonIcon icon={arrowBack} slot="start" />
+                    Retour
+                </IonButton>
             </IonContent>
         </IonPage>
     );
