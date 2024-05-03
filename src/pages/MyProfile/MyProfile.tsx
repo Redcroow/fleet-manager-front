@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { IonPage, IonContent, IonIcon, IonInput, IonButton, IonBreadcrumbs, IonBreadcrumb } from '@ionic/react';
+import { IonPage, IonContent, IonIcon, IonInput, IonButton, IonBreadcrumbs, IonBreadcrumb, IonCard, IonCardHeader, IonCardSubtitle } from '@ionic/react';
 import { arrowBack, personOutline } from 'ionicons/icons';
 import HeaderEmployee from '../../components/Header/Employee/HeaderEmployee';
 import './MyProfile.scss';
@@ -35,6 +35,11 @@ const MyProfile: React.FC = () => {
                 <IonBreadcrumb href="/homepage-employee">Home</IonBreadcrumb>
                 <IonBreadcrumb href="/my-profile">Profile</IonBreadcrumb>
             </IonBreadcrumbs>
+            <IonCard color="success">
+                <IonCardHeader>
+                    <IonCardSubtitle>Vous pouvez consulter ou modifier vos information personnel</IonCardSubtitle>
+                </IonCardHeader>
+            </IonCard>
             <IonContent>
                 <div className='icon-profile-section'>
                     <IonIcon icon={personOutline} className='user-profile-icon' />
