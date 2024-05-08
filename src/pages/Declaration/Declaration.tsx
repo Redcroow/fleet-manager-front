@@ -75,6 +75,13 @@ const DeclarationPage: React.FC = () => {
         });
     };
 
+    const clearInputs = () => {
+        setTitle('');
+        setDescription('');
+        setFiles([]);
+        setPdfGenerated(false);
+    };
+
     return (
         <IonPage>
             <HeaderEmployee />
@@ -98,7 +105,10 @@ const DeclarationPage: React.FC = () => {
                         value={selectedOption}
                         placeholder="Type de déclaration"
                         className='profile-input'
-                        onIonChange={(e) => setSelectedOption(e.detail.value)}
+                        onIonChange={(e) => {
+                            setSelectedOption(e.detail.value);
+                            clearInputs();
+                        }}
                     >
                         <IonSelectOption value="facture">Facture</IonSelectOption>
                         <IonSelectOption value="sinistre">Sinistre</IonSelectOption>
