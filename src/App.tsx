@@ -30,6 +30,7 @@ import HomepageEmployee from './pages/HomepageEmployee/HomepageEmployee';
 import MyFleetPage from './pages/MyFleet/MyFleet';
 import MyProfile from './pages/MyProfile/MyProfile';
 import DeclarationPage from './pages/Declaration/Declaration';
+import HistoryPage from './pages/MyHistory/MyHistory';
 
 setupIonicReact();
 
@@ -63,6 +64,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/declaration">
           <DeclarationPage />
+        </Route>
+        <Route exact path="/my-history">
+          <HistoryPage />
         </Route>
         <Route exact path="/">
           <Redirect to="/auth" />
