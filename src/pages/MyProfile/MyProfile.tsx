@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { IonPage, IonContent, IonIcon, IonInput, IonButton } from '@ionic/react';
-import { arrowBack, personOutline } from 'ionicons/icons';
+import { IonPage, IonContent, IonIcon, IonInput, IonButton, IonBreadcrumbs, IonBreadcrumb, IonCard, IonCardHeader, IonCardSubtitle } from '@ionic/react';
+import { personOutline } from 'ionicons/icons';
 import HeaderEmployee from '../../components/Header/Employee/HeaderEmployee';
 import './MyProfile.scss';
-import { useHistory } from 'react-router-dom';
 
 const MyProfile: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -11,7 +10,6 @@ const MyProfile: React.FC = () => {
     const prenomRef = useRef<HTMLIonInputElement>(null);
     const emailRef = useRef<HTMLIonInputElement>(null);
     const telephoneRef = useRef<HTMLIonInputElement>(null);
-    const history = useHistory();
 
     const toggleEditing = () => {
         setIsEditing(!isEditing);
@@ -27,13 +25,19 @@ const MyProfile: React.FC = () => {
         console.log('Données enregistrées :', updatedFormData);
     };
 
-    const handleBack = () => {
-        history.push('/homepage-employee');
-    };
 
     return (
         <IonPage>
             <HeaderEmployee />
+            <IonBreadcrumbs style={{marginTop:'2em', marginLeft: '10px'}}>
+                <IonBreadcrumb href="/homepage-employee">Home</IonBreadcrumb>
+                <IonBreadcrumb href="/my-profile">Profile</IonBreadcrumb>
+            </IonBreadcrumbs>
+            <IonCard color="success">
+                <IonCardHeader>
+                    <IonCardSubtitle>Vous pouvez consulter ou modifier vos information personnel</IonCardSubtitle>
+                </IonCardHeader>
+            </IonCard>
             <IonContent>
                 <div className='icon-profile-section'>
                     <IonIcon icon={personOutline} className='user-profile-icon' />
@@ -69,10 +73,6 @@ const MyProfile: React.FC = () => {
                         {isEditing ? "Enregistrer" : "Modifier"}
                     </IonButton>
                 </div>
-                <IonButton fill="clear" color="light" onClick={handleBack} className="white-button">
-                    <IonIcon icon={arrowBack} slot="start" />
-                    Retour
-                </IonButton>
             </IonContent>
         </IonPage>
     );
