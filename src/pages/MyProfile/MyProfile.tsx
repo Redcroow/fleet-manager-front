@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { IonPage, IonContent, IonIcon, IonInput, IonButton, IonBreadcrumbs, IonBreadcrumb, IonCard, IonCardHeader, IonCardSubtitle } from '@ionic/react';
-import { arrowBack, personOutline } from 'ionicons/icons';
+import { personOutline } from 'ionicons/icons';
 import HeaderEmployee from '../../components/Header/Employee/HeaderEmployee';
 import './MyProfile.scss';
-import { useHistory } from 'react-router-dom';
 
 const MyProfile: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -11,7 +10,6 @@ const MyProfile: React.FC = () => {
     const prenomRef = useRef<HTMLIonInputElement>(null);
     const emailRef = useRef<HTMLIonInputElement>(null);
     const telephoneRef = useRef<HTMLIonInputElement>(null);
-    const history = useHistory();
 
     const toggleEditing = () => {
         setIsEditing(!isEditing);
