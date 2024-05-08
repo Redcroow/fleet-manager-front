@@ -45,13 +45,19 @@ const DeclarationPage: React.FC = () => {
 
     const generatePDF = () => {
         const doc = new jsPDF();
+        const maxLineWidth = 180; // Largeur maximale d'une ligne dans le PDF
+        let formattedDescription = description; // Nouvelle variable pour stocker la description formatée
+        const textLines = doc.splitTextToSize(description, maxLineWidth);
+        formattedDescription = textLines.join('\n'); // Mettre à jour la description avec les retours à la ligne
+    
         if (selectedOption === 'facture') {
             doc.text(`Titre: ${title}`, 10, 10);
             doc.text(`Date: ${getTodayDate()}`, 10, 20);
         } else if (selectedOption === 'sinistre') {
             doc.text(`Titre: ${title}`, 10, 10);
             doc.text(`Date: ${getTodayDate()}`, 10, 20);
-            doc.text(`Description: ${description}`, 10, 30);
+            doc.text(`Description:`, 10, 30);
+            doc.text(formattedDescription, 20, 40);
         }
         files.forEach((file, index) => {
             const reader = new FileReader();
