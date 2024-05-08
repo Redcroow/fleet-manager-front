@@ -45,10 +45,10 @@ const DeclarationPage: React.FC = () => {
 
     const generatePDF = () => {
         const doc = new jsPDF();
-        const maxLineWidth = 180; // Largeur maximale d'une ligne dans le PDF
-        let formattedDescription = description; // Nouvelle variable pour stocker la description formatée
+        const maxLineWidth = 180;
+        let formattedDescription = description;
         const textLines = doc.splitTextToSize(description, maxLineWidth);
-        formattedDescription = textLines.join('\n'); // Mettre à jour la description avec les retours à la ligne
+        formattedDescription = textLines.join('\n');
     
         if (selectedOption === 'facture') {
             doc.text(`Titre: ${title}`, 10, 10);
@@ -162,7 +162,7 @@ const DeclarationPage: React.FC = () => {
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', marginBottom: '2em' }}>
                             <IonButton disabled={isButtonDisabled()} onClick={generatePDF}>Générer le PDF</IonButton>
                         </div>
-                        {/* Afficher la partie "Envoyer le PDF" uniquement si des fichiers ont été sélectionnés */}
+
                         {pdfGenerated && (
                             <>
                                 <IonCard color="success">
