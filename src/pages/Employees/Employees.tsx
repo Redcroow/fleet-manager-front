@@ -6,11 +6,10 @@ import './Employees.scss';
 import { getEmployeeAll } from '../../api/employee/getEmployeeAll';
 import { jwtDecode } from 'jwt-decode';
 
-// Définissez l'interface Employee
 interface Employee {
   name: string;
   surname: string;
-  [key: string]: any; // Vous pouvez ajouter d'autres propriétés si nécessaire
+  [key: string]: any; 
 }
 
 const Employees: React.FC = () => {
@@ -79,23 +78,27 @@ const Employees: React.FC = () => {
           value={searchText}
           onIonChange={e => setSearchText(e.detail.value!)}
           debounce={300}
-          placeholder="Rechercher par nom ou prénom" autocapitalize={''}        />
-        <table>
-          <thead>
-            <tr>
-              <th>Nom</th>
-              <th>Prénom</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredEmployees.map((employee, index) => (
-              <tr key={index}>
-                <td>{employee.name}</td>
-                <td>{employee.surname}</td>
+          placeholder="Rechercher par nom ou prénom"
+          autocapitalize="off"
+        />
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredEmployees.map((employee, index) => (
+                <tr key={index}>
+                  <td>{employee.name}</td>
+                  <td>{employee.surname}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </IonContent>
     </IonPage>
   );
