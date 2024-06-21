@@ -34,11 +34,13 @@ const AuthPage: React.FC = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
+        console.log(token)
         if (token) {
             const decoded: DecodedUserToken = jwtDecode(token);
             if (decoded.position === "RH") {
                 history.push('/homepage-admin');
             } else if (decoded.position === "Employee") {
+                history.push('/homepage-employee');
                 // if(hasCar) {
                 //     history.push('/homepage-employee');
                 // }else {
@@ -132,12 +134,6 @@ const AuthPage: React.FC = () => {
                         <IonRow>
                             <IonCol>
                                 <IonButton expand="block" onClick={handleLogin}>Se connecter</IonButton>
-                            </IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol>
-                                <IonText>Vous n'avez pas de compte ? </IonText>
-                                <IonRouterLink routerLink="/signup">Inscrivez-vous</IonRouterLink>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
