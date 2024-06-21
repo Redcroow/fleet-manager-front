@@ -1,0 +1,23 @@
+.table-container {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 7px;
+  text-align: center;
+  border-bottom: 1px solid #3c3b3b;
+}
+
+.table th {
+  background-color: #3c3b3b;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #3c3b3b;
+}

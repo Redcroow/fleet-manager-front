@@ -31,6 +31,8 @@ import MyFleetPage from './pages/MyFleet/MyFleet';
 import MyProfile from './pages/MyProfile/MyProfile';
 import DeclarationPage from './pages/Declaration/Declaration';
 import HistoryPage from './pages/MyHistory/MyHistory';
+import LesEmployees from './pages/Employees/Employees';
+import Employees from './pages/Employees/Employees';
 
 setupIonicReact();
 
@@ -52,6 +54,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/homepage-admin">
           <HomepageAdmin />
+        </Route>
+        <Route exact path="/employees">
+          <Employees />
         </Route>
         <Route exact path="/homepage-employee">
           <HomepageEmployee />

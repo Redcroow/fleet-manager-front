@@ -45,7 +45,7 @@ const HomepageAdmin: React.FC = () => {
                   alt="Ma flotte"
                   subtitle="Explorez"
                   title="Ma flotte"
-                  onClick={() => navigateToPage('flotte')}
+                  onClick={() => navigateToPage('fleet')}
                 />
               </IonCol>
               <IonCol size="12" size-md="4">
@@ -54,7 +54,7 @@ const HomepageAdmin: React.FC = () => {
                   alt="Les employers"
                   subtitle="Gérez"
                   title="Les employers"
-                  onClick={() => navigateToPage('employers')}
+                  onClick={() => navigateToPage('employees')}
                 />
               </IonCol>
               <IonCol size="12" size-md="4">
@@ -63,7 +63,7 @@ const HomepageAdmin: React.FC = () => {
                   alt="Les factures"
                   subtitle="Gérez"
                   title="Les factures"
-                  onClick={() => navigateToPage('factures')}
+                  onClick={() => navigateToPage('invoices')}
                 />
               </IonCol>
             </IonRow>
