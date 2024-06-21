@@ -21,3 +21,14 @@
 .profile-button {
     width: 50%;
 }
+.alert-container {
+    position: fixed;
+    bottom: 1em;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
