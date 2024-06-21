@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { IonContent, IonPage } from '@ionic/react';
 import HeaderEmployee from '../../components/Header/Employee/HeaderEmployee';
 import './HomepageEmployee.scss';
+import { jwtDecode } from 'jwt-decode';
 
 const HomepageEmployee: React.FC = () => {
+  const history = useHistory();
   const [isVideoPlayed, setIsVideoPlayed] = useState(false);
+  const [isEmployee, setIsEmployee] = useState(false)
   const [fadeOut, setFadeOut] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      if (decodedToken.position === "Employee") {
+        setIsEmployee(true);
+      } else {
+        history.push('/auth');
+      }
+    } else {
+      history.push('/auth');
+    }
+  }, [history]);
+  
   useEffect(() => {
     const isVideoPlayedInSession = sessionStorage.getItem('isVideoPlayed');
 
