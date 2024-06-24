@@ -35,7 +35,7 @@ const AuthPage: React.FC = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        console.log(token)
+
         if (token) {
             const decoded: DecodedUserToken = jwtDecode(token);
             if (decoded.position === "RH") {
@@ -70,7 +70,6 @@ const AuthPage: React.FC = () => {
 
                 } else if (decoded.position === "Employee") {
                     try {
-                        console.log(decoded.carIds)
                         if (decoded.carIds) {
                             history.push('/homepage-employee');
                         } else {

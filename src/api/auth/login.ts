@@ -1,5 +1,4 @@
 export async function loginUser(email: string, password: string): Promise<any> {
-    console.log("test")
     try {
         const response = await fetch('http://fleetmanager-api.com:81/auth/login', {
             method: 'POST',

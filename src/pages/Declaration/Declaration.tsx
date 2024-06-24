@@ -171,8 +171,8 @@ const DeclarationPage: React.FC = () => {
             }
         }
 
-        console.log("faire le système d'envoi ...");
-        console.log("faire une progress bar pendant l'envoi...");
+        console.log("TODO: faire le système d'envoi ...");
+        console.log("TODO: faire une progress bar pendant l'envoi...");
 
         setTimeout(() => {
             clearInputs();
