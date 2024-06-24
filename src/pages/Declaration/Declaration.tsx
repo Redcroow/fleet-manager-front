@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { IonContent, IonPage, IonItem, IonLabel, IonSelect, IonSelectOption, IonInput, IonTextarea, IonIcon, IonButton, IonBreadcrumbs, IonBreadcrumb, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle } from '@ionic/react';
+import { IonContent, IonPage, IonItem, IonLabel, IonSelect, IonSelectOption,
+    IonInput, IonTextarea, IonIcon, IonButton, IonBreadcrumbs, IonBreadcrumb,
+    IonCard, IonCardHeader, IonCardSubtitle, IonModal, IonHeader, IonToolbar,
+    IonButtons, IonTitle } from '@ionic/react';
 import HeaderEmployee from '../../components/Header/Employee/HeaderEmployee';
 import { calendar, checkmarkCircle, cloudDownloadOutline, constructOutline } from 'ionicons/icons';
 import './Declaration.scss';
 import jsPDF from 'jspdf';
+import { useHistory } from 'react-router-dom';
 
 const DeclarationPage: React.FC = () => {
     const [selectedOption, setSelectedOption] = useState<string>('');
@@ -14,6 +18,7 @@ const DeclarationPage: React.FC = () => {
     const [pdfGenerated, setPdfGenerated] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showLoadingIcon, setShowLoadingIcon] = useState<boolean>(false);
+    const history = useHistory();
 
     const getTodayDate = (): string => {
         const today = new Date();
@@ -40,7 +45,7 @@ const DeclarationPage: React.FC = () => {
     const handleModalFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         const newFileModal = Array.from(e.dataTransfer.files);
-        const pdfModalFile = newFileModal.filter(modalFile => modalFile.type === 'application/pdf');
+        const pdfModalFile = newFileModal.filter((modalFile) => modalFile.type === 'application/pdf');
         if (pdfModalFile.length > 0) {
             setModalFiles([pdfModalFile[0]]);
         }
@@ -49,7 +54,7 @@ const DeclarationPage: React.FC = () => {
     const handleModalFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newFileModal = e.target.files;
         if (newFileModal && newFileModal.length > 0) {
-            const pdfModalFile = Array.from(newFileModal).filter(modalFile => modalFile.type === 'application/pdf');
+            const pdfModalFile = Array.from(newFileModal).filter((modalFile) => modalFile.type === 'application/pdf');
             if (pdfModalFile.length > 0) {
                 setModalFiles([pdfModalFile[0]]);
             }
@@ -60,7 +65,7 @@ const DeclarationPage: React.FC = () => {
         if (selectedOption === 'facture') {
             return !title || files.length === 0;
         } else if (selectedOption === 'sinistre') {
-            return (!title || !description) || files.length === 0;
+            return !title || !description || files.length === 0;
         }
         return true;
     };
@@ -99,28 +104,35 @@ const DeclarationPage: React.FC = () => {
 
     const sendPDF = () => {
         setShowLoadingIcon(true);
+        console.log(`Type: ${selectedOption}, Catégorie: ${title}, Date: ${getTodayDate()}, Description: ${description}`);
         console.log("faire le système d'envoi ...");
         console.log("faire une progress bar pendant l'envoi...");
 
         setTimeout(() => {
             setShowLoadingIcon(false);
             setShowModal(false);
-        }, 3000);
+            clearInputs();
+            history.push('/homepage-employee');
+        }, 4000);
     };
-    
 
     const clearInputs = () => {
         setTitle('');
         setDescription('');
         setFiles([]);
         setPdfGenerated(false);
+        if (selectedOption === 'facture') {
+            console.log(`Type: facture, Catégorie: ${title}, Date: ${getTodayDate()}`);
+        } else if (selectedOption === 'sinistre') {
+            console.log(`Type: sinistre, Titre: ${title}, Date: ${getTodayDate()}, Description: ${description}`);
+        }
     };
 
     return (
         <IonPage>
             <HeaderEmployee />
             <IonContent>
-                <IonBreadcrumbs style={{marginTop:'2em', marginLeft: '10px'}}>
+                <IonBreadcrumbs style={{ marginTop: '2em', marginLeft: '10px' }}>
                     <IonBreadcrumb href="/homepage-employee">Home</IonBreadcrumb>
                     <IonBreadcrumb href="/declaration">Declaration</IonBreadcrumb>
                 </IonBreadcrumbs>
@@ -183,17 +195,25 @@ const DeclarationPage: React.FC = () => {
                         </IonItem>
                         <IonItem>
                             <IonLabel position="floating">Description</IonLabel>
-                            <IonTextarea placeholder="Décrivez en quelques lignes le sinistre ..." rows={5} style={{ minHeight: '300px' }} value={description} onIonChange={(e) => setDescription(e.detail.value!)}></IonTextarea>
+                            <IonTextarea
+                                placeholder="Décrivez en quelques lignes le sinistre ..."
+                                rows={5}
+                                style={{ minHeight: '300px' }}
+                                value={description}
+                                onIonChange={(e) => setDescription(e.detail.value!)}
+                            ></IonTextarea>
                         </IonItem>
                     </>
                 )}
                 {selectedOption && (
-                    <div style={{display:'flex', justifyContent: 'center'}}>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <div className="file-upload-section" onDrop={handleFileDrop} onDragOver={(e) => e.preventDefault()}>
                             <IonIcon icon={cloudDownloadOutline} className="file-icon" size="large" />
                             <label htmlFor="fileInput" className="file-input-label">
                                 <input id="fileInput" type="file" onChange={handleFileInput} accept=".jpg,.jpeg,.png" multiple />
-                                <span className="file-input-text">Faites glisser un fichier ici ou cliquez pour sélectionner un fichier.</span>
+                                <span className="file-input-text">
+                                    Faites glisser un fichier ici ou cliquez pour sélectionner un fichier.
+                                </span>
                             </label>
                         </div>
                     </div>
@@ -211,14 +231,18 @@ const DeclarationPage: React.FC = () => {
                 {selectedOption && (
                     <>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', marginBottom: '2em' }}>
-                            <IonButton disabled={isButtonDisabled()} onClick={generatePDF}>Générer le PDF</IonButton>
+                            <IonButton disabled={isButtonDisabled()} onClick={generatePDF}>
+                                Générer le PDF
+                            </IonButton>
                         </div>
 
                         {pdfGenerated && (
                             <>
                                 <IonCard color="success">
                                     <IonCardHeader>
-                                        <IonCardSubtitle>Une fois le PDF généré, veuillez l'envoyer à votre RH grâce au bouton ci-dessous</IonCardSubtitle>
+                                        <IonCardSubtitle>
+                                            Une fois le PDF généré, veuillez l'envoyer à votre RH grâce au bouton ci-dessous
+                                        </IonCardSubtitle>
                                     </IonCardHeader>
                                 </IonCard>
                                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1em', marginBottom: '2em' }}>
@@ -229,49 +253,61 @@ const DeclarationPage: React.FC = () => {
                     </>
                 )}
 
-<IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
-    <IonHeader>
-        <IonToolbar>
-            <IonButtons slot="start">
-                <IonButton onClick={() => setShowModal(false)}>Cancel</IonButton>
-            </IonButtons>
-            <IonTitle>Envoyer votre PDF</IonTitle>
-            <IonButtons slot="end">
-                <IonButton strong={true} onClick={sendPDF}>Confirm</IonButton>
-            </IonButtons>
-        </IonToolbar>
-    </IonHeader>
-    <IonContent className="ion-padding">
-        {showLoadingIcon ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <IonIcon icon={constructOutline} size="large" />
-            </div>
-        ) : (
-            <>
-                <div style={{ display:'flex', justifyContent: 'center'}}>
-                    <div className="file-upload-section" onDrop={handleModalFileDrop} onDragOver={(e) => e.preventDefault()}>
-                        <IonIcon icon={cloudDownloadOutline} className="file-icon" size="large" />
-                        <label htmlFor="modalFileInput" className="file-input-label">
-                            <input id="modalFileInput" type="file" onChange={handleModalFileInput} accept=".pdf" />
-                            <span className="file-input-text">Faites glisser un fichier PDF ici ou cliquez pour sélectionner un fichier.</span>
-                        </label>
-                    </div>
-                </div>
-                {modalFiles.length > 0 && (
-                    <div className="file-info">
-                        {modalFiles.map((modalFile, index) => (
-                            <div key={index} className="file-item">
-                                <IonIcon icon={checkmarkCircle} className="checkmark-icon" />
-                                <p>{modalFile.name}</p>
+                <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonButtons slot="start">
+                                <IonButton onClick={() => setShowModal(false)}>Cancel</IonButton>
+                            </IonButtons>
+                            <IonTitle>Envoyer votre PDF</IonTitle>
+                            <IonButtons slot="end">
+                                <IonButton strong={true} onClick={sendPDF}>
+                                    Confirm
+                                </IonButton>
+                            </IonButtons>
+                        </IonToolbar>
+                    </IonHeader>
+                    <IonContent className="ion-padding">
+                        {showLoadingIcon ? (
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                <IonIcon icon={constructOutline} size="large" />
                             </div>
-                        ))}
-                    </div>
-                )}
-            </>
-        )}
-    </IonContent>
-</IonModal>
-
+                        ) : (
+                            <>
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <div
+                                        className="file-upload-section"
+                                        onDrop={handleModalFileDrop}
+                                        onDragOver={(e) => e.preventDefault()}
+                                    >
+                                        <IonIcon icon={cloudDownloadOutline} className="file-icon" size="large" />
+                                        <label htmlFor="modalFileInput" className="file-input-label">
+                                            <input
+                                                id="modalFileInput"
+                                                type="file"
+                                                onChange={handleModalFileInput}
+                                                accept=".pdf"
+                                            />
+                                            <span className="file-input-text">
+                                                Faites glisser un fichier PDF ici ou cliquez pour sélectionner un fichier.
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                {modalFiles.length > 0 && (
+                                    <div className="file-info">
+                                        {modalFiles.map((modalFile, index) => (
+                                            <div key={index} className="file-item">
+                                                <IonIcon icon={checkmarkCircle} className="checkmark-icon" />
+                                                <p>{modalFile.name}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </IonContent>
+                </IonModal>
             </IonContent>
         </IonPage>
     );
