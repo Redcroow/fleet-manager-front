@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { IonContent, IonPage, IonItem, IonLabel, IonSelect, IonSelectOption,
+import {
+    IonContent, IonPage, IonItem, IonLabel, IonSelect, IonSelectOption,
     IonInput, IonTextarea, IonIcon, IonButton, IonBreadcrumbs, IonBreadcrumb,
     IonCard, IonCardHeader, IonCardSubtitle, IonModal, IonHeader, IonToolbar,
-    IonButtons, IonTitle } from '@ionic/react';
+    IonButtons, IonTitle
+} from '@ionic/react';
 import HeaderEmployee from '../../components/Header/Employee/HeaderEmployee';
 import { calendar, checkmarkCircle, cloudDownloadOutline, constructOutline } from 'ionicons/icons';
 import './Declaration.scss';
@@ -15,9 +17,20 @@ const DeclarationPage: React.FC = () => {
     const [modalFiles, setModalFiles] = useState<File[]>([]);
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
+    const [prixSinistre, setPrixSinistre] = useState<number | undefined>(undefined);
+    const [insuranceClaimNumber, setInsuranceClaimNumber] = useState<string>('');
     const [pdfGenerated, setPdfGenerated] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showLoadingIcon, setShowLoadingIcon] = useState<boolean>(false);
+    const [prix, setPrix] = useState<number | undefined>(undefined);
+    const [litre, setLitre] = useState<number | undefined>(undefined);
+    const [typeCarburant, setTypeCarburant] = useState<string>('');
+    const [endroit, setEndroit] = useState<string>('');
+    const [prixEntretien, setPrixEntretien] = useState<number | undefined>(undefined);
+    const [mechanicName, setMechanicName] = useState<string>('');
+    const [descriptionEntretien, setDescriptionEntretien] = useState<string>('');
+    const [mileage, setMileage] = useState<number | undefined>(undefined);
+
     const history = useHistory();
 
     const getTodayDate = (): string => {
@@ -63,7 +76,7 @@ const DeclarationPage: React.FC = () => {
 
     const isButtonDisabled = () => {
         if (selectedOption === 'facture') {
-            return !title || files.length === 0;
+            return !title || files.length === 0 || (title === 'Essence' && (prix === undefined || litre === undefined || typeCarburant === '' || endroit === ''));
         } else if (selectedOption === 'sinistre') {
             return !title || !description || files.length === 0;
         }
@@ -80,6 +93,18 @@ const DeclarationPage: React.FC = () => {
         if (selectedOption === 'facture') {
             doc.text(`Titre: ${title}`, 10, 10);
             doc.text(`Date: ${getTodayDate()}`, 10, 20);
+            if (title === 'Essence') {
+                doc.text(`Prix: ${prix}`, 10, 30);
+                doc.text(`Litres: ${litre}`, 10, 40);
+                doc.text(`Type de carburant: ${typeCarburant}`, 10, 50);
+                doc.text(`Endroit: ${endroit}`, 10, 60);
+            }else if (title === 'Entretiens') {
+                doc.text(`Coût de l'entretien: ${prixEntretien}`, 10, 30);
+                doc.text(`Nom du mécanicien: ${mechanicName}`, 10, 40);
+                doc.text(`Description de l'entretien:`, 10, 50);
+                doc.text(descriptionEntretien, 20, 60);
+                doc.text(`Kilométrage: ${mileage}`, 10, 80);
+            }
         } else if (selectedOption === 'sinistre') {
             doc.text(`Titre: ${title}`, 10, 10);
             doc.text(`Date: ${getTodayDate()}`, 10, 20);
@@ -104,20 +129,31 @@ const DeclarationPage: React.FC = () => {
 
     const sendPDF = () => {
         setShowLoadingIcon(true);
-        if(selectedOption == "facture") {
-            if(title == "Essence") {
-                // TODO : recupérer : le prix, le litre, le type de carburant, et l'endroit + date
-                console.log("essence")
-
-            }else if(title == "Maintenance") {
-                // TODO : recupérer : le cost, le mechanicName, description, et mileage + date
-                console.log("maintenance")
+        if (selectedOption === 'facture') {
+            if (title === 'Essence') {
+                console.log("Prix:", prix);
+                console.log("Litres:", litre);
+                console.log("Type de carburant:", typeCarburant);
+                console.log("Endroit:", endroit);
+                console.log("Date:", getTodayDate());
+                // TODO : Envoyer ces données via une API
+            } else if (title === 'Entretiens') {
+                console.log("Coût de l'entretien:", prixEntretien);
+                console.log("Nom du mécanicien:", mechanicName);
+                console.log("Description de l'entretien:", descriptionEntretien);
+                console.log("Kilométrage:", mileage);
+                console.log("Date:", getTodayDate());
+                // TODO: Envoyer ces données via une API
             }
-        }else if(selectedOption == "sinistre") {
-            // TODO : récuperer : le cost, le insuranceClaimNumber, description + date
-            console.log("sinistre")
+        } else if (selectedOption === 'sinistre') {
+            console.log("Titre:", title);
+            console.log("Prix:", prixSinistre);
+            console.log("Assurance:", insuranceClaimNumber);
+            console.log("Description du sinistre:", description);
+            console.log("Date:", getTodayDate());
+            // TODO: Envoyer ces données via une API
         }
-        
+
         console.log("faire le système d'envoi ...");
         console.log("faire une progress bar pendant l'envoi...");
 
@@ -134,6 +170,16 @@ const DeclarationPage: React.FC = () => {
         setDescription('');
         setFiles([]);
         setPdfGenerated(false);
+        setPrix(undefined);
+        setLitre(undefined);
+        setTypeCarburant('');
+        setEndroit('');
+        setPrixEntretien(undefined);
+        setMechanicName('');
+        setDescriptionEntretien('');
+        setPrixSinistre(undefined);
+        setInsuranceClaimNumber('');
+        setMileage(undefined);
     };
 
     return (
@@ -187,6 +233,53 @@ const DeclarationPage: React.FC = () => {
                             <IonInput type="date" value={getTodayDate()} disabled></IonInput>
                             <IonIcon icon={calendar} slot="end"></IonIcon>
                         </IonItem>
+
+                        {title === 'Essence' && (
+                            <>
+                                <IonItem>
+                                    <IonLabel position="floating">Prix</IonLabel>
+                                    <IonInput type="number" value={prix} onIonChange={(e) => setPrix(parseFloat(e.detail.value!))}></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="floating">Litres</IonLabel>
+                                    <IonInput type="number" value={litre} onIonChange={(e) => setLitre(parseFloat(e.detail.value!))}></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="floating">Type de carburant</IonLabel>
+                                    <IonInput type="text" value={typeCarburant} onIonChange={(e) => setTypeCarburant(e.detail.value!)}></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="floating">Endroit</IonLabel>
+                                    <IonInput type="text" value={endroit} onIonChange={(e) => setEndroit(e.detail.value!)}></IonInput>
+                                </IonItem>
+                            </>
+                        )}
+                        {title === 'Entretiens' && (
+                            <>
+                                <IonItem>
+                                    <IonLabel position="floating">Coût de l'entretien</IonLabel>
+                                    <IonInput type="number" value={prixEntretien} onIonChange={(e) => setPrixEntretien(parseFloat(e.detail.value!))}></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="floating">Nom du mécanicien</IonLabel>
+                                    <IonInput type="text" value={mechanicName} onIonChange={(e) => setMechanicName(e.detail.value!)}></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="floating">Kilométrage</IonLabel>
+                                    <IonInput type="number" value={mileage} onIonChange={(e) => setMileage(parseFloat(e.detail.value!))}></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="floating">Description de l'entretien</IonLabel>
+                                    <IonTextarea
+                                        placeholder="Décrivez en quelques lignes l'entretien ..."
+                                        rows={5}
+                                        style={{ minHeight: '300px' }}
+                                        value={descriptionEntretien}
+                                        onIonChange={(e) => setDescriptionEntretien(e.detail.value!)}
+                                    ></IonTextarea>
+                                </IonItem>
+                            </>
+                        )}
                     </>
                 )}
 
@@ -195,6 +288,14 @@ const DeclarationPage: React.FC = () => {
                         <IonItem>
                             <IonLabel position="floating">Titre</IonLabel>
                             <IonInput type="text" placeholder="Accident" value={title} onIonChange={(e) => setTitle(e.detail.value!)}></IonInput>
+                        </IonItem>
+                        <IonItem>
+                            <IonLabel position="floating">Prix</IonLabel>
+                            <IonInput type="number" value={prixSinistre} onIonChange={(e) => setPrixSinistre(parseFloat(e.detail.value!))}></IonInput>
+                        </IonItem>
+                        <IonItem>
+                            <IonLabel position="floating">Numéros d'assurance</IonLabel>
+                            <IonInput type="text" placeholder="ICN123456" value={insuranceClaimNumber} onIonChange={(e) => setInsuranceClaimNumber(e.detail.value!)}></IonInput>
                         </IonItem>
                         <IonItem>
                             <IonLabel position="floating">Date</IonLabel>
@@ -213,6 +314,7 @@ const DeclarationPage: React.FC = () => {
                         </IonItem>
                     </>
                 )}
+
                 {selectedOption && (
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <div className="file-upload-section" onDrop={handleFileDrop} onDragOver={(e) => e.preventDefault()}>
