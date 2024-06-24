@@ -20,7 +20,7 @@ const ForgotPage: React.FC = () => {
 
     const handleSendEmail = () => {
         const emailValue = emailRef.current?.value;
-        console.log('Email envoyé : ', emailValue);
+        console.log('TODO: faire un message comme quoi le mail est envoyé')
     };
 
     const handleBack = () => {

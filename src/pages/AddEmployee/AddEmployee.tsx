@@ -28,6 +28,7 @@ const AddEmployee: React.FC = () => {
     const [position, setPosition] = useState('Employee');
     const passwordRef = useRef<HTMLIonInputElement>(null);
     const history = useHistory();
+    const token = localStorage.getItem('access_token');
     
     const handleNextStep = async () => {
         if (step === 1) {
@@ -35,10 +36,10 @@ const AddEmployee: React.FC = () => {
         } else {
             const enteredPassword = passwordRef.current?.value || '';
             const employeeData = { firstName, lastName, phoneNumber, email, password: enteredPassword, position };
-            console.log('Informations de l\'utilisateur : ', employeeData);
             try {
-                const response = await postEmployee(employeeData);
-                console.log('Employee registered successfully:', response);
+                if(token) {
+                    const response = await postEmployee(token, employeeData);
+                }
             } catch (error) {
                 console.error('Error registering employee:', error);
             }

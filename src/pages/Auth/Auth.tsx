@@ -20,6 +20,7 @@ import { getCarAll } from '../../api/car/getCar';
 
 interface DecodedUserToken {
     id: number;
+    carIds: [];
     first_name: string;
     last_name: string;
     email: string;
@@ -34,18 +35,18 @@ const AuthPage: React.FC = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        console.log(token)
+
         if (token) {
             const decoded: DecodedUserToken = jwtDecode(token);
             if (decoded.position === "RH") {
                 history.push('/homepage-admin');
             } else if (decoded.position === "Employee") {
                 history.push('/homepage-employee');
-                // if(hasCar) {
-                //     history.push('/homepage-employee');
-                // }else {
-                //     history.push('/infos');
-                // }
+                if (decoded.carIds) {
+                    history.push('/homepage-employee');
+                } else {
+                    history.push('/infos');
+                }     
             } else {
                 history.push('/infos');
             }
@@ -69,19 +70,11 @@ const AuthPage: React.FC = () => {
 
                 } else if (decoded.position === "Employee") {
                     try {
-                        const carData = await getCarAll(userData.access_token);
-
-                        if (carData) {
-                            const hasCar = carData.some((car: any) => car.assignedEmployeeId === decoded.id);
-                            localStorage.setItem('hasCar', hasCar.toString());
-
-                            if (hasCar) {
-                                history.push('/homepage-employee');
-                                
-                            } else {
-                                history.push('/infos');
-                            }
-                        }      
+                        if (decoded.carIds) {
+                            history.push('/homepage-employee');
+                        } else {
+                            history.push('/infos');
+                        }     
                     } catch (error) {
                         console.error('Erreur lors de la récupération des données de voiture : ', error);
                     }
