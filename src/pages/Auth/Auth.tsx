@@ -42,11 +42,11 @@ const AuthPage: React.FC = () => {
                 history.push('/homepage-admin');
             } else if (decoded.position === "Employee") {
                 history.push('/homepage-employee');
-                // if(hasCar) {
-                //     history.push('/homepage-employee');
-                // }else {
-                //     history.push('/infos');
-                // }
+                if (decoded.carIds) {
+                    history.push('/homepage-employee');
+                } else {
+                    history.push('/infos');
+                }     
             } else {
                 history.push('/infos');
             }
