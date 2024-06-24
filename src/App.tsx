@@ -23,7 +23,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import SignupPage from './pages/Signup/Signup';
+import AddEmployee from './pages/AddEmployee/AddEmployee';
 import InfosPage from './pages/Infos/Infos';
 import HomepageAdmin from './pages/HomepageAdmin/HomepageAdmin';
 import HomepageEmployee from './pages/HomepageEmployee/HomepageEmployee';
@@ -44,8 +44,8 @@ const App: React.FC = () => (
         <Route exact path="/forgot-password">
           <ForgotPage />
         </Route>
-        <Route exact path="/signup">
-          <SignupPage />
+        <Route exact path="/add-employee">
+          <AddEmployee />
         </Route>
         <Route exact path="/infos">
           <InfosPage />

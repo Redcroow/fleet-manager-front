@@ -15,24 +15,33 @@ import {
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
-import './Signup.scss';
+import './AddEmployee.scss';
+import { postEmployee } from '../../api/employee/postEmployee';
 
-const SignupPage: React.FC = () => {
+const AddEmployee: React.FC = () => {
     const [step, setStep] = useState(1);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [position, setPosition] = useState('Employee');
     const passwordRef = useRef<HTMLIonInputElement>(null);
     const history = useHistory();
     
-    const handleNextStep = () => {
+    const handleNextStep = async () => {
         if (step === 1) {
             setStep(2);
         } else {
             const enteredPassword = passwordRef.current?.value || '';
-            console.log('Informations de l\'utilisateur : ', { firstName, lastName, phoneNumber, email, enteredPassword });
+            const employeeData = { firstName, lastName, phoneNumber, email, password: enteredPassword, position };
+            console.log('Informations de l\'utilisateur : ', employeeData);
+            try {
+                const response = await postEmployee(employeeData);
+                console.log('Employee registered successfully:', response);
+            } catch (error) {
+                console.error('Error registering employee:', error);
+            }
         }
     };
 
@@ -43,11 +52,18 @@ const SignupPage: React.FC = () => {
     return (
         <IonPage>
             <IonContent>
-                <div className="signup-container">
+                <div className="addemployee-container">
                     <IonGrid>
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
                                 <IonImg src="src/assets/images/fleetmanager-white-logo.png" alt="Logo" />
+                            </IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol>
+                                <IonInput disabled={true}>
+                                    {position}
+                                </IonInput>
                             </IonCol>
                         </IonRow>
                         <IonRow>
@@ -135,4 +151,4 @@ const SignupPage: React.FC = () => {
     );
 };
 
-export default SignupPage;
+export default AddEmployee;
