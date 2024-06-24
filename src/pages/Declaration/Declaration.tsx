@@ -10,6 +10,7 @@ import { calendar, checkmarkCircle, cloudDownloadOutline, constructOutline } fro
 import './Declaration.scss';
 import jsPDF from 'jspdf';
 import { useHistory } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const DeclarationPage: React.FC = () => {
     const [selectedOption, setSelectedOption] = useState<string>('');
@@ -25,11 +26,12 @@ const DeclarationPage: React.FC = () => {
     const [prix, setPrix] = useState<number | undefined>(undefined);
     const [litre, setLitre] = useState<number | undefined>(undefined);
     const [typeCarburant, setTypeCarburant] = useState<string>('');
-    const [endroit, setEndroit] = useState<string>('');
+    const [lieu, setLieu] = useState<string>('');
     const [prixEntretien, setPrixEntretien] = useState<number | undefined>(undefined);
     const [mechanicName, setMechanicName] = useState<string>('');
     const [descriptionEntretien, setDescriptionEntretien] = useState<string>('');
     const [mileage, setMileage] = useState<number | undefined>(undefined);
+    const token = localStorage.getItem('access_token');
 
     const history = useHistory();
 
@@ -76,7 +78,7 @@ const DeclarationPage: React.FC = () => {
 
     const isButtonDisabled = () => {
         if (selectedOption === 'facture') {
-            return !title || files.length === 0 || (title === 'Essence' && (prix === undefined || litre === undefined || typeCarburant === '' || endroit === ''));
+            return !title || files.length === 0 || (title === 'Essence' && (prix === undefined || litre === undefined || typeCarburant === '' || lieu === ''));
         } else if (selectedOption === 'sinistre') {
             return !title || !description || files.length === 0;
         }
@@ -97,7 +99,7 @@ const DeclarationPage: React.FC = () => {
                 doc.text(`Prix: ${prix}`, 10, 30);
                 doc.text(`Litres: ${litre}`, 10, 40);
                 doc.text(`Type de carburant: ${typeCarburant}`, 10, 50);
-                doc.text(`Endroit: ${endroit}`, 10, 60);
+                doc.text(`Lieu: ${lieu}`, 10, 60);
             }else if (title === 'Entretiens') {
                 doc.text(`Coût de l'entretien: ${prixEntretien}`, 10, 30);
                 doc.text(`Nom du mécanicien: ${mechanicName}`, 10, 40);
@@ -129,29 +131,40 @@ const DeclarationPage: React.FC = () => {
 
     const sendPDF = () => {
         setShowLoadingIcon(true);
-        if (selectedOption === 'facture') {
-            if (title === 'Essence') {
-                console.log("Prix:", prix);
-                console.log("Litres:", litre);
-                console.log("Type de carburant:", typeCarburant);
-                console.log("Endroit:", endroit);
-                console.log("Date:", getTodayDate());
-                // TODO : Envoyer ces données via une API
-            } else if (title === 'Entretiens') {
-                console.log("Coût de l'entretien:", prixEntretien);
-                console.log("Nom du mécanicien:", mechanicName);
-                console.log("Description de l'entretien:", descriptionEntretien);
-                console.log("Kilométrage:", mileage);
-                console.log("Date:", getTodayDate());
+        if(token) {
+            const decodedToken: any = jwtDecode(token);
+            if (selectedOption === 'facture') {
+                if (title === 'Essence') {
+                    const fuelData = {
+                        carId: decodedToken.carIds[0],
+                        description: lieu,
+                        cost: prix,
+                        fuelType: typeCarburant,
+                        quantity: litre,
+                        date: getTodayDate()
+                    };
+                    // TODO : Envoyer ces données via une API
+                } else if (title === 'Entretiens') {
+                    const maintenanceData = {
+                        carId: decodedToken.carIds[0],
+                        mechanicName: mechanicName,
+                        maintenanceDate: getTodayDate(),
+                        description: descriptionEntretien,
+                        cost: prixEntretien,
+                        mileage: mileage
+                    };
+                    // TODO: Envoyer ces données via une API
+                }
+            } else if (selectedOption === 'sinistre') {
+                const accidentData = {
+                    carId: decodedToken.carIds[0],
+                    accidentDate: getTodayDate(),
+                    description: description,
+                    cost: prixSinistre,
+                    insuranceClaimNumber: insuranceClaimNumber,
+                };
                 // TODO: Envoyer ces données via une API
             }
-        } else if (selectedOption === 'sinistre') {
-            console.log("Titre:", title);
-            console.log("Prix:", prixSinistre);
-            console.log("Assurance:", insuranceClaimNumber);
-            console.log("Description du sinistre:", description);
-            console.log("Date:", getTodayDate());
-            // TODO: Envoyer ces données via une API
         }
 
         console.log("faire le système d'envoi ...");
@@ -173,7 +186,7 @@ const DeclarationPage: React.FC = () => {
         setPrix(undefined);
         setLitre(undefined);
         setTypeCarburant('');
-        setEndroit('');
+        setLieu('');
         setPrixEntretien(undefined);
         setMechanicName('');
         setDescriptionEntretien('');
@@ -249,8 +262,8 @@ const DeclarationPage: React.FC = () => {
                                     <IonInput type="text" value={typeCarburant} onIonChange={(e) => setTypeCarburant(e.detail.value!)}></IonInput>
                                 </IonItem>
                                 <IonItem>
-                                    <IonLabel position="floating">Endroit</IonLabel>
-                                    <IonInput type="text" value={endroit} onIonChange={(e) => setEndroit(e.detail.value!)}></IonInput>
+                                    <IonLabel position="floating">Lieu</IonLabel>
+                                    <IonInput type="text" value={lieu} onIonChange={(e) => setLieu(e.detail.value!)}></IonInput>
                                 </IonItem>
                             </>
                         )}

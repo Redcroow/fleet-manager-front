@@ -20,6 +20,7 @@ import { getCarAll } from '../../api/car/getCar';
 
 interface DecodedUserToken {
     id: number;
+    carIds: [];
     first_name: string;
     last_name: string;
     email: string;
@@ -69,19 +70,12 @@ const AuthPage: React.FC = () => {
 
                 } else if (decoded.position === "Employee") {
                     try {
-                        const carData = await getCarAll(userData.access_token);
-
-                        if (carData) {
-                            const hasCar = carData.some((car: any) => car.assignedEmployeeId === decoded.id);
-                            localStorage.setItem('hasCar', hasCar.toString());
-
-                            if (hasCar) {
-                                history.push('/homepage-employee');
-                                
-                            } else {
-                                history.push('/infos');
-                            }
-                        }      
+                        console.log(decoded.carIds)
+                        if (decoded.carIds) {
+                            history.push('/homepage-employee');
+                        } else {
+                            history.push('/infos');
+                        }     
                     } catch (error) {
                         console.error('Erreur lors de la récupération des données de voiture : ', error);
                     }
