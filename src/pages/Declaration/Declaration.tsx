@@ -11,6 +11,9 @@ import './Declaration.scss';
 import jsPDF from 'jspdf';
 import { useHistory } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import { postFuelHistory } from '../../api/fuel-history/postFuelHistory';
+import { postMaintenanceHistory } from '../../api/maintenance-history/postMaintenanceHistory';
+import { postAccidentHistory } from '../../api/accident-history/postAccidentHistory';
 
 const DeclarationPage: React.FC = () => {
     const [selectedOption, setSelectedOption] = useState<string>('');
@@ -129,7 +132,7 @@ const DeclarationPage: React.FC = () => {
         });
     };
 
-    const sendPDF = () => {
+    const sendPDF = async () => {
         setShowLoadingIcon(true);
         if(token) {
             const decodedToken: any = jwtDecode(token);
@@ -141,9 +144,9 @@ const DeclarationPage: React.FC = () => {
                         cost: prix,
                         fuelType: typeCarburant,
                         quantity: litre,
-                        date: getTodayDate()
+                        fuelDate: getTodayDate()
                     };
-                    // TODO : Envoyer ces données via une API
+                    await postFuelHistory(token, fuelData);
                 } else if (title === 'Entretiens') {
                     const maintenanceData = {
                         carId: decodedToken.carIds[0],
@@ -153,17 +156,18 @@ const DeclarationPage: React.FC = () => {
                         cost: prixEntretien,
                         mileage: mileage
                     };
-                    // TODO: Envoyer ces données via une API
+                    await postMaintenanceHistory(token, maintenanceData);
                 }
             } else if (selectedOption === 'sinistre') {
                 const accidentData = {
                     carId: decodedToken.carIds[0],
+                    title: title,
                     accidentDate: getTodayDate(),
                     description: description,
                     cost: prixSinistre,
                     insuranceClaimNumber: insuranceClaimNumber,
                 };
-                // TODO: Envoyer ces données via une API
+                await postAccidentHistory(token, accidentData)
             }
         }
 
