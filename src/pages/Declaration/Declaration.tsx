@@ -104,14 +104,27 @@ const DeclarationPage: React.FC = () => {
 
     const sendPDF = () => {
         setShowLoadingIcon(true);
-        console.log(`Type: ${selectedOption}, Catégorie: ${title}, Date: ${getTodayDate()}, Description: ${description}`);
+        if(selectedOption == "facture") {
+            if(title == "Essence") {
+                // TODO : recupérer : le prix, le litre, le type de carburant, et l'endroit + date
+                console.log("essence")
+
+            }else if(title == "Maintenance") {
+                // TODO : recupérer : le cost, le mechanicName, description, et mileage + date
+                console.log("maintenance")
+            }
+        }else if(selectedOption == "sinistre") {
+            // TODO : récuperer : le cost, le insuranceClaimNumber, description + date
+            console.log("sinistre")
+        }
+        
         console.log("faire le système d'envoi ...");
         console.log("faire une progress bar pendant l'envoi...");
 
         setTimeout(() => {
+            clearInputs();
             setShowLoadingIcon(false);
             setShowModal(false);
-            clearInputs();
             history.push('/homepage-employee');
         }, 4000);
     };
@@ -121,11 +134,6 @@ const DeclarationPage: React.FC = () => {
         setDescription('');
         setFiles([]);
         setPdfGenerated(false);
-        if (selectedOption === 'facture') {
-            console.log(`Type: facture, Catégorie: ${title}, Date: ${getTodayDate()}`);
-        } else if (selectedOption === 'sinistre') {
-            console.log(`Type: sinistre, Titre: ${title}, Date: ${getTodayDate()}, Description: ${description}`);
-        }
     };
 
     return (
