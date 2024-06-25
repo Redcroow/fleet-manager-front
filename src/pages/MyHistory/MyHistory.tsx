@@ -3,11 +3,11 @@ import { IonBreadcrumb, IonBreadcrumbs, IonCard, IonCardContent, IonCardHeader, 
 import HeaderEmployee from "../../components/Header/Employee/HeaderEmployee";
 import { checkmark, eye, close } from 'ionicons/icons';
 import './MyHistory.scss';
-import { getAllFuelHistoryByUser } from '../../api/fuel-history/getAllFuelhistoryByUser';
+import { getAllFuelHistoryByUser } from '../../api/fuel-history/getAllFuelHistoryByUser';
 import { getAllMaintenanceHistoryByUser } from '../../api/maintenance-history/getAllMaintenanceHistoryByUser';
 import { getAllAccidentHistoryByUser } from '../../api/accident-history/getAllAccidentHistoryByUser';
-import { getFuelHistory } from '../../api/fuel-history/getFuelhistory';
-import { getMaintenanceHistory } from '../../api/maintenance-history/getMaintenancehistory';
+import { getFuelHistory } from '../../api/fuel-history/getFuelHistory';
+import { getMaintenanceHistory } from '../../api/maintenance-history/getMaintenanceHistory';
 import { getAccidentHistory } from '../../api/accident-history/getAccidentHistory';
 import { fr } from 'date-fns/locale'
 import { format } from 'date-fns';
