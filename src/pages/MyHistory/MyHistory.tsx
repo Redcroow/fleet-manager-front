@@ -1,29 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IonBreadcrumb, IonBreadcrumbs, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonPage, IonButton, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons } from "@ionic/react";
 import HeaderEmployee from "../../components/Header/Employee/HeaderEmployee";
 import { checkmark, eye, close } from 'ionicons/icons';
 import './MyHistory.scss';
+import { getAllFuelHistoryByUser } from '../../api/fuel-history/getAllFuelhistoryByUser';
+import { getAllMaintenanceHistoryByUser } from '../../api/maintenance-history/getAllMaintenanceHistoryByUser';
+import { getAllAccidentHistoryByUser } from '../../api/accident-history/getAllAccidentHistoryByUser';
+import { getFuelHistory } from '../../api/fuel-history/getFuelhistory';
+import { getMaintenanceHistory } from '../../api/maintenance-history/getMaintenancehistory';
+import { getAccidentHistory } from '../../api/accident-history/getAccidentHistory';
+import { fr } from 'date-fns/locale'
+import { format } from 'date-fns';
+import { jwtDecode } from 'jwt-decode';
 
 const HistoryPage: React.FC = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedItem, setSelectedItem] = useState<{ id: number, type: string, date: string, status: string } | null>(null);
+    const [tableData, setTableData] = useState<{ id: number, type: string, date: string, status: string }[]>([]);
+    const [fuelDataById, setFuelDataById] = useState<any>(null);
+    const [maintenanceDataById, setMaintenanceDataById] = useState<any>(null);
+    const [accidentDataById, setAccidentDataById] = useState<any>(null);
+    const token = localStorage.getItem('access_token');
 
-    const tableData = [
-        { id: 1, type: 'Facture', date: '01/05/2024', status: 'Completed' },
-        { id: 2, type: 'Sinistre', date: '02/05/2024', status: 'Pending' },
-        { id: 3, type: 'Sinistre', date: '03/05/2024', status: 'Pending' },
-        { id: 4, type: 'Facture', date: '04/05/2024', status: 'Pending' },
-    ];
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                if (token) {
+                    const decodedToken: any = jwtDecode(token);
 
-    const openModal = (item: { id: number, type: string, date: string, status: string }) => {
-        setSelectedItem(item);
-        setShowModal(true);
+                    const fuelData = await getAllFuelHistoryByUser(token, decodedToken.id);
+                    const accidentData = await getAllAccidentHistoryByUser(token, decodedToken.id);
+                    const maintenanceData = await getAllMaintenanceHistoryByUser(token, decodedToken.id);
+
+                    const formattedData = [
+                        ...fuelData.map((item: any) => ({
+                            id: item.id,
+                            type: 'Facture',
+                            date: isValidDate(item.created_at) ? format(new Date(item.created_at), 'dd/MM/yyyy', { locale: fr }) : '',
+                            status: ''
+                        })),
+                        ...accidentData.map((item: any) => ({
+                            id: item.id,
+                            type: 'Sinistre',
+                            date: isValidDate(item.created_at) ? format(new Date(item.created_at), 'dd/MM/yyyy', { locale: fr }) : '',
+                            status: ''
+                        })),
+                        ...maintenanceData.map((item: any) => ({
+                            id: item.id,
+                            type: 'Maintenance',
+                            date: isValidDate(item.created_at) ? format(new Date(item.created_at), 'dd/MM/yyyy', { locale: fr }) : '',
+                            status: ''
+                        }))
+                    ];
+    
+                    setTableData(formattedData);
+                }
+            } catch (error) {
+                console.error('Error fetching history data:', error);
+            }
+        }
+        fetchData();
+    }, [token]);
+
+    const isValidDate = (dateString: string | undefined | null) => {
+        const date = dateString ? new Date(dateString) : NaN;
+        return date instanceof Date && !isNaN(date.getTime());
+    };
+
+    const openModal = async (item: { id: number, type: string, date: string, status: string }) => {
+        if (token) {
+            setSelectedItem(item);
+            setShowModal(true);
+
+            try {
+                if (item.type === "Facture") {
+                    const fuelDataById = await getFuelHistory(token, item.id);
+                    console.log(fuelDataById)
+                    setFuelDataById(fuelDataById);
+                } else if (item.type === "Maintenance") {
+                    const maintenanceDataById = await getMaintenanceHistory(token, item.id);
+                    console.log(maintenanceDataById)
+                    setMaintenanceDataById(maintenanceDataById);
+                } else if (item.type === "Sinistre") {
+                    const accidentDataById = await getAccidentHistory(token, item.id);
+                    console.log(accidentDataById)
+                    setAccidentDataById(accidentDataById);
+                }
+            } catch (error) {
+                console.error('Error fetching item details:', error);
+            }
+        }
     };
 
     const closeModal = () => {
         setSelectedItem(null);
         setShowModal(false);
+        setFuelDataById(null);
+        setMaintenanceDataById(null);
+        setAccidentDataById(null);
     };
+
 
     return (
         <IonPage>
@@ -39,7 +115,7 @@ const HistoryPage: React.FC = () => {
                         <IonCardSubtitle>Votre prochaine entretien arrive bientôt !</IonCardSubtitle>
                     </IonCardHeader>
                     <IonCardContent>
-                        Date : xx/xx/xxxx
+                        Date : 🚧/🚧/🚧
                     </IonCardContent>
                 </IonCard>
 
@@ -54,8 +130,8 @@ const HistoryPage: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {tableData.map(item => (
-                                <tr key={item.id}>
+                            {tableData.map((item, index) => (
+                                <tr key={item.id + '-' + index}>
                                     <td>{item.type}</td>
                                     <td>{item.date}</td>
                                     <td>
@@ -72,7 +148,6 @@ const HistoryPage: React.FC = () => {
                     </table>
                 </div>
 
-                {/* Modal */}
                 <IonModal isOpen={showModal} onDidDismiss={closeModal}>
                     <IonHeader>
                         <IonToolbar>
@@ -82,6 +157,11 @@ const HistoryPage: React.FC = () => {
                             </IonButtons>
                         </IonToolbar>
                     </IonHeader>
+                    <IonCard color="warning">
+                        <IonCardHeader>
+                            <IonCardSubtitle>Le status n'est pas encore disponible. 🚧</IonCardSubtitle>
+                        </IonCardHeader>
+                    </IonCard>
                     <IonContent>
                         <IonCard>
                             <IonCardContent>
@@ -91,15 +171,42 @@ const HistoryPage: React.FC = () => {
                                             <div style={{ display:'flex', justifyContent: 'center', margin:'0.5em 1em 2em 1em'}}>
                                                 <h1>{selectedItem.type} du {selectedItem.date}</h1>
                                             </div>
-                                            <div style={{ margin:'0px 1em 2em 1em'}}>
-                                                <h2>Status: {selectedItem.status}</h2>
-                                            </div>
-                                            <IonButton>Télécharger</IonButton>
+  
+                                            {selectedItem.type === "Facture" && fuelDataById && (
+                                                <div>
+                                                    <p>ID : FA0{fuelDataById.id}</p>
+                                                    <p>Lieu : {fuelDataById.description}</p>
+                                                    <p>Quantité : {fuelDataById.quantity} litres</p>
+                                                    <p>Prix : {fuelDataById.cost}euros</p>
+                                                </div>
+                                            )}
+                                            {selectedItem.type === "Maintenance" && maintenanceDataById && (
+                                                <div>
+                                                    <p>Maintenance ID : MA0{maintenanceDataById.id}</p>
+                                                    <p>Description : {maintenanceDataById.description}</p>
+                                                    <p>Prix : {maintenanceDataById.cost}</p>
+                                                    <p>Kilométrage : {maintenanceDataById.mileage}</p>
+                                                </div>
+                                            )}
+                                            {selectedItem.type === "Sinistre" && accidentDataById && (
+                                                <div>
+                                                    <p>ID : SI0{accidentDataById.id}</p>
+                                                    <p>Details : {accidentDataById.description}</p>
+                                                    <p>Prix : {accidentDataById.cost}</p>
+                                                    <p>Assurance : {accidentDataById.insuranceClaimNumber}</p>
+                                                </div>
+                                            )}
+                                            <IonButton disabled>Télécharger</IonButton>
                                         </div>
                                     </>
                                 )}
                             </IonCardContent>
                         </IonCard>
+                    <IonCard color="warning">
+                        <IonCardHeader>
+                            <IonCardSubtitle>La fonction de téléchargement n'est pas encore disponible. 🚧</IonCardSubtitle>
+                        </IonCardHeader>
+                    </IonCard>
                     </IonContent>
                 </IonModal>
 
