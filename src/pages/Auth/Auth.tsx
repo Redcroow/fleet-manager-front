@@ -18,9 +18,10 @@ import './Auth.scss';
 import { useHistory } from 'react-router-dom';
 import { getCarAll } from '../../api/car/getCarAll';
 
+
 interface DecodedUserToken {
     id: number;
-    carIds: [];
+    carId: number;
     first_name: string;
     last_name: string;
     email: string;
@@ -42,7 +43,7 @@ const AuthPage: React.FC = () => {
                 history.push('/homepage-admin');
             } else if (decoded.position === "Employee") {
                 history.push('/homepage-employee');
-                if (decoded.carIds) {
+                if (decoded.carId) {
                     history.push('/homepage-employee');
                 } else {
                     history.push('/infos');
@@ -70,7 +71,7 @@ const AuthPage: React.FC = () => {
 
                 } else if (decoded.position === "Employee") {
                     try {
-                        if (decoded.carIds) {
+                        if (decoded.carId) {
                             history.push('/homepage-employee');
                         } else {
                             history.push('/infos');
