@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     IonPage,
     IonContent,
@@ -8,6 +8,9 @@ import {
     IonRow,
     IonCol,
     IonIcon,
+    IonCard,
+    IonCardHeader,
+    IonCardSubtitle
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 
@@ -17,10 +20,16 @@ import { arrowBack } from 'ionicons/icons';
 const ForgotPage: React.FC = () => {
     const emailRef = useRef<HTMLIonInputElement>(null);
     const history = useHistory();
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleSendEmail = () => {
         const emailValue = emailRef.current?.value;
-        console.log('TODO: faire un message comme quoi le mail est envoyé')
+
+        setShowAlert(true);
+
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 4000);
     };
 
     const handleBack = () => {
@@ -61,6 +70,15 @@ const ForgotPage: React.FC = () => {
                             </IonCol>
                         </IonRow>
                     </IonGrid>
+                    {showAlert && (
+                        <div className="alert-container">
+                            <IonCard color="success">
+                                <IonCardHeader>
+                                    <IonCardSubtitle>Email envoyé avec succès 🎉</IonCardSubtitle>
+                                </IonCardHeader>
+                            </IonCard>
+                        </div>
+                    )}
                 </div>
             </IonContent>
         </IonPage>
