@@ -16,6 +16,8 @@ import {
 import { loginUser } from './../../api/auth/login';
 import './Auth.scss';
 import { useHistory } from 'react-router-dom';
+import { getCarAll } from '../../api/car/getCarAll';
+
 
 interface DecodedUserToken {
     id: number;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/react';
-import { getCarAll } from '../../api/car/getCar';
+import { getCarAll } from '../../api/car/getCarAll';
 import HeaderAdmin from '../../components/Header/Admin/HeaderAdmin';
 
 const MyFleetPage: React.FC = () => {
