@@ -6,6 +6,9 @@ import './MyHistory.scss';
 import { getAllFuelHistoryByUser } from '../../api/fuel-history/getAllFuelhistoryByUser';
 import { getAllMaintenanceHistoryByUser } from '../../api/maintenance-history/getAllMaintenanceHistoryByUser';
 import { getAllAccidentHistoryByUser } from '../../api/accident-history/getAllAccidentHistoryByUser';
+import { getFuelHistory } from '../../api/fuel-history/getFuelhistory';
+import { getMaintenanceHistory } from '../../api/maintenance-history/getMaintenancehistory';
+import { getAccidentHistory } from '../../api/accident-history/getAccidentHistory';
 import { fr } from 'date-fns/locale'
 import { format } from 'date-fns';
 import { jwtDecode } from 'jwt-decode';
@@ -41,7 +44,7 @@ const HistoryPage: React.FC = () => {
                         })),
                         ...maintenanceData.map((item: any) => ({
                             id: item.id,
-                            type: 'Facture',
+                            type: 'Maintenance',
                             date: isValidDate(item.created_at) ? format(new Date(item.created_at), 'dd/MM/yyyy', { locale: fr }) : '',
                             status: ''
                         }))
@@ -61,10 +64,23 @@ const HistoryPage: React.FC = () => {
         return date instanceof Date && !isNaN(date.getTime());
     };
 
-    const openModal = (item: { id: number, type: string, date: string, status: string }) => {
-        console.log(item)
-        setSelectedItem(item);
-        setShowModal(true);
+    const openModal = async (item: { id: number, type: string, date: string, status: string }) => {
+        if (token) {
+            if(item.type == "Facture") {
+                const fuelDataById = await getFuelHistory(token, item.id);
+                console.log(fuelDataById)
+
+            }else if(item.type == "Maintenance") {
+                const maintenanceDataById = await getMaintenanceHistory(token, item.id);
+                console.log(maintenanceDataById)
+
+            }else if(item.type == "Sinistre"){
+                const accidentDataById = await getAccidentHistory(token, item.id);
+                console.log(accidentDataById)
+            }
+            setSelectedItem(item);
+            setShowModal(true);
+        }
     };
 
     const closeModal = () => {
