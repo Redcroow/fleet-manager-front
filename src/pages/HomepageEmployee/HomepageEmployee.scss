@@ -17,4 +17,104 @@
 .fade-out-employee {
   animation: fadeOut 1s ease-in-out forwards;
 }
+
+.section-video {
+  height: 43%;
+}
+
+.section-infos {
+  margin-left: 40px;
+  .car-info-pp {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 130px;
+
+    .car-img {
+      width: 140px;
+      display: flex;
+      align-items: center;
+    }
+    .car-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      img {
+        width: 20px;
+      }
+    }
+  }
+}
+
+.car-info-tech {
+  margin-top: 50px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  .icon-info{
+    width: 150px;
+  }
+  .caracteristique {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    .icon-cara {
+      width: 30px !important;
+    }
+    .div1 {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      margin-top: 25px;
+      .div2 {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span {
+          margin-left: 10px;
+        }
+      }
+    }
+
+  }
+}
+
+.car-info-perf {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  .icon-performance{
+    width: 100px;
+  }
+  .performances {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    .icon-perf {
+      width: 30px !important;
+    }
+    .div1 {
+      width: 120%;
+      display: flex;
+      justify-content: space-around;
+      margin-top: 25px;
+      .div2 {
+        width: 120%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+
+}
   

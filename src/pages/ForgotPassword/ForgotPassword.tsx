@@ -39,6 +39,11 @@ const ForgotPage: React.FC = () => {
     return (
         <IonPage>
             <IonContent>
+                <IonCard color="warning">
+                    <IonCardHeader>
+                        <IonCardSubtitle>L'envoie de mail n'est pas encore disponible. 🚧</IonCardSubtitle>
+                    </IonCardHeader>
+                </IonCard>
                 <div className="forgot-password-container">
                     <IonGrid>
                         <IonRow className="ion-justify-content-center">
