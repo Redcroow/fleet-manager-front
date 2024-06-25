@@ -17,6 +17,9 @@ const HistoryPage: React.FC = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedItem, setSelectedItem] = useState<{ id: number, type: string, date: string, status: string } | null>(null);
     const [tableData, setTableData] = useState<{ id: number, type: string, date: string, status: string }[]>([]);
+    const [fuelDataById, setFuelDataById] = useState<any>(null);
+    const [maintenanceDataById, setMaintenanceDataById] = useState<any>(null);
+    const [accidentDataById, setAccidentDataById] = useState<any>(null);
     const token = localStorage.getItem('access_token');
 
     useEffect(() => {
@@ -66,27 +69,37 @@ const HistoryPage: React.FC = () => {
 
     const openModal = async (item: { id: number, type: string, date: string, status: string }) => {
         if (token) {
-            if(item.type == "Facture") {
-                const fuelDataById = await getFuelHistory(token, item.id);
-                console.log(fuelDataById)
-
-            }else if(item.type == "Maintenance") {
-                const maintenanceDataById = await getMaintenanceHistory(token, item.id);
-                console.log(maintenanceDataById)
-
-            }else if(item.type == "Sinistre"){
-                const accidentDataById = await getAccidentHistory(token, item.id);
-                console.log(accidentDataById)
-            }
             setSelectedItem(item);
             setShowModal(true);
+
+            try {
+                if (item.type === "Facture") {
+                    const fuelDataById = await getFuelHistory(token, item.id);
+                    console.log(fuelDataById)
+                    setFuelDataById(fuelDataById);
+                } else if (item.type === "Maintenance") {
+                    const maintenanceDataById = await getMaintenanceHistory(token, item.id);
+                    console.log(maintenanceDataById)
+                    setMaintenanceDataById(maintenanceDataById);
+                } else if (item.type === "Sinistre") {
+                    const accidentDataById = await getAccidentHistory(token, item.id);
+                    console.log(accidentDataById)
+                    setAccidentDataById(accidentDataById);
+                }
+            } catch (error) {
+                console.error('Error fetching item details:', error);
+            }
         }
     };
 
     const closeModal = () => {
         setSelectedItem(null);
         setShowModal(false);
+        setFuelDataById(null);
+        setMaintenanceDataById(null);
+        setAccidentDataById(null);
     };
+
 
     return (
         <IonPage>
@@ -102,7 +115,7 @@ const HistoryPage: React.FC = () => {
                         <IonCardSubtitle>Votre prochaine entretien arrive bientôt !</IonCardSubtitle>
                     </IonCardHeader>
                     <IonCardContent>
-                        Date : xx/xx/xxxx
+                        Date : 🚧/🚧/🚧
                     </IonCardContent>
                 </IonCard>
 
@@ -135,7 +148,6 @@ const HistoryPage: React.FC = () => {
                     </table>
                 </div>
 
-                {/* Modal */}
                 <IonModal isOpen={showModal} onDidDismiss={closeModal}>
                     <IonHeader>
                         <IonToolbar>
@@ -145,6 +157,11 @@ const HistoryPage: React.FC = () => {
                             </IonButtons>
                         </IonToolbar>
                     </IonHeader>
+                    <IonCard color="warning">
+                        <IonCardHeader>
+                            <IonCardSubtitle>Le status n'est pas encore disponible. 🚧</IonCardSubtitle>
+                        </IonCardHeader>
+                    </IonCard>
                     <IonContent>
                         <IonCard>
                             <IonCardContent>
@@ -154,15 +171,42 @@ const HistoryPage: React.FC = () => {
                                             <div style={{ display:'flex', justifyContent: 'center', margin:'0.5em 1em 2em 1em'}}>
                                                 <h1>{selectedItem.type} du {selectedItem.date}</h1>
                                             </div>
-                                            <div style={{ margin:'0px 1em 2em 1em'}}>
-                                                <h2>Status: {selectedItem.status}</h2>
-                                            </div>
-                                            <IonButton>Télécharger</IonButton>
+  
+                                            {selectedItem.type === "Facture" && fuelDataById && (
+                                                <div>
+                                                    <p>ID : FA0{fuelDataById.id}</p>
+                                                    <p>Lieu : {fuelDataById.description}</p>
+                                                    <p>Quantité : {fuelDataById.quantity} litres</p>
+                                                    <p>Prix : {fuelDataById.cost}euros</p>
+                                                </div>
+                                            )}
+                                            {selectedItem.type === "Maintenance" && maintenanceDataById && (
+                                                <div>
+                                                    <p>Maintenance ID : MA0{maintenanceDataById.id}</p>
+                                                    <p>Description : {maintenanceDataById.description}</p>
+                                                    <p>Prix : {maintenanceDataById.cost}</p>
+                                                    <p>Kilométrage : {maintenanceDataById.mileage}</p>
+                                                </div>
+                                            )}
+                                            {selectedItem.type === "Sinistre" && accidentDataById && (
+                                                <div>
+                                                    <p>ID : SI0{accidentDataById.id}</p>
+                                                    <p>Details : {accidentDataById.description}</p>
+                                                    <p>Prix : {accidentDataById.cost}</p>
+                                                    <p>Assurance : {accidentDataById.insuranceClaimNumber}</p>
+                                                </div>
+                                            )}
+                                            <IonButton disabled>Télécharger</IonButton>
                                         </div>
                                     </>
                                 )}
                             </IonCardContent>
                         </IonCard>
+                    <IonCard color="warning">
+                        <IonCardHeader>
+                            <IonCardSubtitle>La fonction de téléchargement n'est pas encore disponible. 🚧</IonCardSubtitle>
+                        </IonCardHeader>
+                    </IonCard>
                     </IonContent>
                 </IonModal>
 
