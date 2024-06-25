@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     IonContent, IonPage, IonItem, IonLabel, IonSelect, IonSelectOption,
     IonInput, IonTextarea, IonIcon, IonButton, IonBreadcrumbs, IonBreadcrumb,
@@ -35,8 +35,16 @@ const DeclarationPage: React.FC = () => {
     const [descriptionEntretien, setDescriptionEntretien] = useState<string>('');
     const [mileage, setMileage] = useState<number | undefined>(undefined);
     const token = localStorage.getItem('access_token');
-
+    const scrollRef = useRef<HTMLDivElement>(null);
     const history = useHistory();
+
+    useEffect(() => {
+        if (pdfGenerated) {
+            setTimeout(() => {
+                scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, 1000); // Délai de 1 seconde
+        }
+    }, [pdfGenerated]);
 
     const getTodayDate = (): string => {
         const today = new Date();
@@ -126,6 +134,7 @@ const DeclarationPage: React.FC = () => {
                 if (index === files.length - 1) {
                     doc.save('declaration.pdf');
                     setPdfGenerated(true);
+                    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
                 }
             };
             reader.readAsDataURL(file);
@@ -139,7 +148,7 @@ const DeclarationPage: React.FC = () => {
             if (selectedOption === 'facture') {
                 if (title === 'Essence') {
                     const fuelData = {
-                        carId: decodedToken.carIds[0],
+                        carId: decodedToken.carId,
                         description: lieu,
                         cost: prix,
                         fuelType: typeCarburant,
@@ -149,7 +158,7 @@ const DeclarationPage: React.FC = () => {
                     await postFuelHistory(token, fuelData);
                 } else if (title === 'Entretiens') {
                     const maintenanceData = {
-                        carId: decodedToken.carIds[0],
+                        carId: decodedToken.carId,
                         mechanicName: mechanicName,
                         maintenanceDate: getTodayDate(),
                         description: descriptionEntretien,
@@ -160,7 +169,7 @@ const DeclarationPage: React.FC = () => {
                 }
             } else if (selectedOption === 'sinistre') {
                 const accidentData = {
-                    carId: decodedToken.carIds[0],
+                    carId: decodedToken.carId,
                     title: title,
                     accidentDate: getTodayDate(),
                     description: description,
@@ -435,6 +444,7 @@ const DeclarationPage: React.FC = () => {
                         )}
                     </IonContent>
                 </IonModal>
+                <div ref={scrollRef}></div>
             </IonContent>
         </IonPage>
     );
