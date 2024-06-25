@@ -3,7 +3,8 @@ import {
     IonContent, IonPage, IonItem, IonLabel, IonSelect, IonSelectOption,
     IonInput, IonTextarea, IonIcon, IonButton, IonBreadcrumbs, IonBreadcrumb,
     IonCard, IonCardHeader, IonCardSubtitle, IonModal, IonHeader, IonToolbar,
-    IonButtons, IonTitle
+    IonButtons, IonTitle,
+    IonProgressBar
 } from '@ionic/react';
 import HeaderEmployee from '../../components/Header/Employee/HeaderEmployee';
 import { calendar, checkmarkCircle, cloudDownloadOutline, constructOutline } from 'ionicons/icons';
@@ -36,13 +37,15 @@ const DeclarationPage: React.FC = () => {
     const [mileage, setMileage] = useState<number | undefined>(undefined);
     const token = localStorage.getItem('access_token');
     const scrollRef = useRef<HTMLDivElement>(null);
+    const [progress, setProgress] = useState<number>(0);
+    const [successMessage, setSuccessMessage] = useState<string>('');
     const history = useHistory();
 
     useEffect(() => {
         if (pdfGenerated) {
             setTimeout(() => {
                 scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, 1000); // Délai de 1 seconde
+            }, 1000);
         }
     }, [pdfGenerated]);
 
@@ -143,52 +146,65 @@ const DeclarationPage: React.FC = () => {
 
     const sendPDF = async () => {
         setShowLoadingIcon(true);
-        if(token) {
+        setProgress(0);
+    
+        if (token) {
             const decodedToken: any = jwtDecode(token);
-            if (selectedOption === 'facture') {
-                if (title === 'Essence') {
-                    const fuelData = {
+            try {
+                if (selectedOption === 'facture') {
+                    if (title === 'Essence') {
+                        const fuelData = {
+                            carId: decodedToken.carId,
+                            description: lieu,
+                            cost: prix,
+                            fuelType: typeCarburant,
+                            quantity: litre,
+                            fuelDate: getTodayDate()
+                        };
+                        await postFuelHistory(token, fuelData);
+                    } else if (title === 'Entretiens') {
+                        const maintenanceData = {
+                            carId: decodedToken.carId,
+                            mechanicName: mechanicName,
+                            maintenanceDate: getTodayDate(),
+                            description: descriptionEntretien,
+                            cost: prixEntretien,
+                            mileage: mileage
+                        };
+                        await postMaintenanceHistory(token, maintenanceData);
+                    }
+                } else if (selectedOption === 'sinistre') {
+                    const accidentData = {
                         carId: decodedToken.carId,
-                        description: lieu,
-                        cost: prix,
-                        fuelType: typeCarburant,
-                        quantity: litre,
-                        fuelDate: getTodayDate()
+                        title: title,
+                        accidentDate: getTodayDate(),
+                        description: description,
+                        cost: prixSinistre,
+                        insuranceClaimNumber: insuranceClaimNumber,
                     };
-                    await postFuelHistory(token, fuelData);
-                } else if (title === 'Entretiens') {
-                    const maintenanceData = {
-                        carId: decodedToken.carId,
-                        mechanicName: mechanicName,
-                        maintenanceDate: getTodayDate(),
-                        description: descriptionEntretien,
-                        cost: prixEntretien,
-                        mileage: mileage
-                    };
-                    await postMaintenanceHistory(token, maintenanceData);
+                    await postAccidentHistory(token, accidentData);
                 }
-            } else if (selectedOption === 'sinistre') {
-                const accidentData = {
-                    carId: decodedToken.carId,
-                    title: title,
-                    accidentDate: getTodayDate(),
-                    description: description,
-                    cost: prixSinistre,
-                    insuranceClaimNumber: insuranceClaimNumber,
-                };
-                await postAccidentHistory(token, accidentData)
+    
+                try {
+                    setProgress(100);
+                    setTimeout(() => {
+                        setSuccessMessage('Votre PDF a été envoyé avec succès 🎉');
+                        setTimeout(() => {
+                            setSuccessMessage('');
+                            setModalFiles([]);
+                            setShowModal(false);
+                            history.push('/homepage-employee');
+                        }, 3000);
+                    }, 3000);
+                } catch (error) {
+                    console.error('Erreur lors de l\'envoi du PDF : ', error);
+                    setShowLoadingIcon(false);
+                }
+            } catch (error) {
+                console.error('Erreur lors de l\'envoi du PDF : ', error);
+                setShowLoadingIcon(false);
             }
         }
-
-        console.log("TODO: faire le système d'envoi ...");
-        console.log("TODO: faire une progress bar pendant l'envoi...");
-
-        setTimeout(() => {
-            clearInputs();
-            setShowLoadingIcon(false);
-            setShowModal(false);
-            history.push('/homepage-employee');
-        }, 4000);
     };
 
     const clearInputs = () => {
@@ -404,12 +420,18 @@ const DeclarationPage: React.FC = () => {
                         </IonToolbar>
                     </IonHeader>
                     <IonContent className="ion-padding">
-                        {showLoadingIcon ? (
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                                <IonIcon icon={constructOutline} size="large" />
+                    {showLoadingIcon ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <IonProgressBar value={progress / 100} color="success"></IonProgressBar>
+                                {successMessage && (
+                                    <div>
+                                        <h1>{successMessage}</h1>
+                                        <p>Vous serez redirigé vers la page d'accueil dans quelques secondes...</p>
+                                    </div>
+                                )}
                             </div>
-                        ) : (
-                            <>
+                        ) : !successMessage ? (
+                            <div>
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <div
                                         className="file-upload-section"
@@ -440,8 +462,8 @@ const DeclarationPage: React.FC = () => {
                                         ))}
                                     </div>
                                 )}
-                            </>
-                        )}
+                            </div>
+                        ) : null}
                     </IonContent>
                 </IonModal>
                 <div ref={scrollRef}></div>
