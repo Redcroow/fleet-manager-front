@@ -194,6 +194,7 @@ const DeclarationPage: React.FC = () => {
                             setModalFiles([]);
                             setShowModal(false);
                             history.push('/homepage-employee');
+                            window.location.reload();
                         }, 3000);
                     }, 3000);
                 } catch (error) {
