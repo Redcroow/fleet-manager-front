@@ -1,21 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IonBreadcrumb, IonBreadcrumbs, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonPage, IonButton, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons } from "@ionic/react";
 import HeaderEmployee from "../../components/Header/Employee/HeaderEmployee";
 import { checkmark, eye, close } from 'ionicons/icons';
 import './MyHistory.scss';
+import { getAllFuelHistory } from '../../api/fuel-history/getAllFuelHistory';
+import { getAllAccidentHistory } from '../../api/accident-history/getAllAccidentHistory';
+import { getAllMaintenanceHistory } from '../../api/maintenance-history/getAllMaintenanceHistory';
+import { fr } from 'date-fns/locale'
+import { format } from 'date-fns';
 
 const HistoryPage: React.FC = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedItem, setSelectedItem] = useState<{ id: number, type: string, date: string, status: string } | null>(null);
+    const [tableData, setTableData] = useState<{ id: number, type: string, date: string, status: string }[]>([]);
+    const token = localStorage.getItem('access_token');
 
-    const tableData = [
-        { id: 1, type: 'Facture', date: '01/05/2024', status: 'Completed' },
-        { id: 2, type: 'Sinistre', date: '02/05/2024', status: 'Pending' },
-        { id: 3, type: 'Sinistre', date: '03/05/2024', status: 'Pending' },
-        { id: 4, type: 'Facture', date: '04/05/2024', status: 'Pending' },
-    ];
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                if (token) {
+                    const fuelData = await getAllFuelHistory(token);
+                    const accidentData = await getAllAccidentHistory(token);
+                    const maintenanceData = await getAllMaintenanceHistory(token);
+
+                    const formattedData = [
+                        ...fuelData.map((item: any) => ({
+                            id: item.id,
+                            type: 'Facture',
+                            date: isValidDate(item.created_at) ? format(new Date(item.created_at), 'dd/MM/yyyy', { locale: fr }) : '',
+                            status: ''
+                        })),
+                        ...accidentData.map((item: any) => ({
+                            id: item.id,
+                            type: 'Sinistre',
+                            date: isValidDate(item.created_at) ? format(new Date(item.created_at), 'dd/MM/yyyy', { locale: fr }) : '',
+                            status: ''
+                        })),
+                        ...maintenanceData.map((item: any) => ({
+                            id: item.id,
+                            type: 'Facture',
+                            date: isValidDate(item.created_at) ? format(new Date(item.created_at), 'dd/MM/yyyy', { locale: fr }) : '',
+                            status: ''
+                        }))
+                    ];
+    
+                    setTableData(formattedData);
+                }
+            } catch (error) {
+                console.error('Error fetching history data:', error);
+            }
+        }
+        fetchData();
+    }, [token]);
+
+    const isValidDate = (dateString: string | undefined | null) => {
+        const date = dateString ? new Date(dateString) : NaN;
+        return date instanceof Date && !isNaN(date.getTime());
+    };
 
     const openModal = (item: { id: number, type: string, date: string, status: string }) => {
+        console.log(item)
         setSelectedItem(item);
         setShowModal(true);
     };
@@ -54,8 +98,8 @@ const HistoryPage: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {tableData.map(item => (
-                                <tr key={item.id}>
+                            {tableData.map((item, index) => (
+                                <tr key={item.id + '-' + index}>
                                     <td>{item.type}</td>
                                     <td>{item.date}</td>
                                     <td>
