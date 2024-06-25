@@ -6,10 +6,12 @@ import './Employees.scss';
 import { getEmployeeAll } from '../../api/employee/getEmployeeAll';
 import { jwtDecode } from 'jwt-decode';
 import { getEmployee } from '../../api/employee/getEmployee';
+import { getCar } from '../../api/car/getCar';
 
 interface Employee {
   name: string;
   surname: string;
+  phone_number: string;
   [key: string]: any;
 }
 
@@ -21,6 +23,8 @@ const Employees: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [expandedRowIndex, setExpandedRowIndex] = useState<number | null>(null);
   const [employeeDetails, setEmployeeDetails] = useState<{ [key: number]: any }>({});
+  const [employeeCars, setEmployeeCars] = useState<{ [key: number]: any }>({});
+
 
 
   useEffect(() => {
@@ -84,6 +88,12 @@ const Employees: React.FC = () => {
               ...prevDetails,
               [employeeId]: data,
             }));
+            
+            const carData = await getCar(token, employeeId);
+            setEmployeeCars(prevCars => ({
+              ...prevCars,
+              [employeeId]: carData,
+            }));
           } else {
             history.push('/auth');
           }
@@ -93,6 +103,7 @@ const Employees: React.FC = () => {
       }
     }
   };
+  
   
 
   return (
@@ -116,6 +127,7 @@ const Employees: React.FC = () => {
               <tr>
                 <th>Nom</th>
                 <th>Prénom</th>
+                <th>Téléphone</th>
               </tr>
             </thead>
             <tbody>
@@ -124,16 +136,23 @@ const Employees: React.FC = () => {
                   <tr onClick={() => handleRowClick(index, employee.id)} className={expandedRowIndex === index ? 'expanded' : ''}>
                     <td>{employee.name}</td>
                     <td>{employee.surname}</td>
+                    <td>{employee.phone_number}</td>
                   </tr>
                   {expandedRowIndex === index && (
                     <tr className="accordion-content">
-                      <td colSpan={2}>
+                      <td colSpan={3}>
                       <div>
                       {employeeDetails[employee.id] ? (
                         <div>
                           {/* Afficher ici les détails supplémentaires */}
                           <p>Email: {employeeDetails[employee.id].email}</p>
-                          <p>Téléphone: {employeeDetails[employee.id].phone_number}</p>
+                          <p>
+                            Attribution: {employeeCars[employee.id] ? `${employeeCars[employee.id].brand} ${employeeCars[employee.id].model}` : "Pas de voiture attitrée"}
+                            <br />
+                            {employeeCars[employee.id] && (
+                              <span>Immatriculation : {employeeCars[employee.id].registrationPlate}</span>
+                            )}
+                          </p>
                           {/* Ajoutez d'autres détails que vous souhaitez afficher */}
                         </div>
                       ) : (
