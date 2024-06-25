@@ -1,6 +1,8 @@
-export async function getAllMaintenanceHistory(accessToken: string): Promise<any> {
+export async function getAllMaintenanceHistoryByUser(accessToken: string, userId: number): Promise<any> {
     try {
-        const response = await fetch('http://fleetmanager-api.com:81/maintenance-history', {
+        const url = `http://fleetmanager-api.com:81/maintenance-history?userId=${userId}`;
+
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': '*/*',

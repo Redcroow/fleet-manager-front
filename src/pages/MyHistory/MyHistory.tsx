@@ -3,11 +3,12 @@ import { IonBreadcrumb, IonBreadcrumbs, IonCard, IonCardContent, IonCardHeader, 
 import HeaderEmployee from "../../components/Header/Employee/HeaderEmployee";
 import { checkmark, eye, close } from 'ionicons/icons';
 import './MyHistory.scss';
-import { getAllFuelHistory } from '../../api/fuel-history/getAllFuelHistory';
-import { getAllAccidentHistory } from '../../api/accident-history/getAllAccidentHistory';
-import { getAllMaintenanceHistory } from '../../api/maintenance-history/getAllMaintenanceHistory';
+import { getAllFuelHistoryByUser } from '../../api/fuel-history/getAllFuelhistoryByUser';
+import { getAllMaintenanceHistoryByUser } from '../../api/maintenance-history/getAllMaintenanceHistoryByUser';
+import { getAllAccidentHistoryByUser } from '../../api/accident-history/getAllAccidentHistoryByUser';
 import { fr } from 'date-fns/locale'
 import { format } from 'date-fns';
+import { jwtDecode } from 'jwt-decode';
 
 const HistoryPage: React.FC = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -19,9 +20,11 @@ const HistoryPage: React.FC = () => {
         async function fetchData() {
             try {
                 if (token) {
-                    const fuelData = await getAllFuelHistory(token);
-                    const accidentData = await getAllAccidentHistory(token);
-                    const maintenanceData = await getAllMaintenanceHistory(token);
+                    const decodedToken: any = jwtDecode(token);
+
+                    const fuelData = await getAllFuelHistoryByUser(token, decodedToken.id);
+                    const accidentData = await getAllAccidentHistoryByUser(token, decodedToken.id);
+                    const maintenanceData = await getAllMaintenanceHistoryByUser(token, decodedToken.id);
 
                     const formattedData = [
                         ...fuelData.map((item: any) => ({

@@ -1,6 +1,8 @@
-export async function getAllFuelHistory(accessToken: string): Promise<any> {
+export async function getAllFuelHistoryByUser(accessToken: string, userId: number): Promise<any> {
     try {
-        const response = await fetch('http://fleetmanager-api.com:81/fuel-history', {
+        const url = `http://fleetmanager-api.com:81/fuel-history?userId=${userId}`;
+
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': '*/*',
