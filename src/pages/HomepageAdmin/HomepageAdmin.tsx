@@ -45,7 +45,7 @@ const HomepageAdmin: React.FC = () => {
                   alt="Ma flotte"
                   subtitle="Explorez"
                   title="Ma flotte"
-                  onClick={() => navigateToPage('fleet')}
+                  onClick={() => navigateToPage('my-fleet')}
                 />
               </IonCol>
               <IonCol size="12" size-md="4">
