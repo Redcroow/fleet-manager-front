@@ -1,0 +1,86 @@
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  .table-wrapper {
+    height: 350px;
+    overflow-y: auto;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      .table th, .table td {
+        border: 1px solid black;
+        padding: 8px !important;
+        font-size: 15px;
+        text-align: left;
+        cursor: pointer;
+      }
+      .table th {
+        text-align: left;
+      }
+  
+      tr.expanded {
+        background-color: #ddd;
+        color: black;
+      }
+  
+      tr.accordion-content {
+        display: none;
+      }
+  
+      tr.expanded + .accordion-content {
+        display: table-row;
+
+        td {
+          background-color: black;
+        }
+  
+        div {
+          background-color: black;
+        }
+      }
+    }
+  }
+}
+
+  .add-vehicle-button {
+    position: fixed;
+    left: 20px;
+    padding: 5px 10px;
+    color: #003D5C;
+    border-radius: 5px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .car-header-expended {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .car-body-expended {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      p {
+        margin: 5px 0;
+      }
+    }
+  
+    .right-column {
+      flex: 0.5;
+      .details-button {
+        font: small-caption;
+      }
+    }
+  }
+  

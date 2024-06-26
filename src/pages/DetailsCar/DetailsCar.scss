@@ -1,0 +1,71 @@
+.fiche-tech {
+    display: flex;
+    flex-direction: column;
+    .section-fiche-tech {
+        font-size: 11px;
+        display: flex;
+        flex-direction: column;
+        .fiche-tech-tp {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            padding: 15px 0;
+        }
+        .img-fiche-tech {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            padding: 15px 0;
+            .car-fiche-tech {
+                width: 200px;
+            }
+        }
+        .fiche-tech-bt {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            padding: 15px 0;
+        }
+    }
+    // .section-separation {
+    
+    // }
+    .section-attribution {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        margin: 0 30px;
+        flex-direction: column;
+        align-items: stretch;
+    
+        .icon-user-fiche-tech {
+            margin: 10px;
+            font-size: 30px;
+        }
+    
+        .attribution-input-wrapper {
+            display: flex;
+        
+            .attribution-input {
+                width: 100%;
+            }
+        }
+    }
+    .section-maintenance {
+        margin-bottom: 30px;
+        .btn-maintenance {
+            display: flex;
+            justify-content: flex-end;
+            margin: 20px 35px;
+        }
+    }
+    .section-delete {
+        display: contents;
+    }
+}
+.modal-attribution-opened {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 15px;
+}
