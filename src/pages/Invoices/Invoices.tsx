@@ -10,6 +10,9 @@ import {
     IonTitle,
     IonButton,
     IonButtons,
+    IonCard,
+    IonCardHeader,
+    IonCardSubtitle,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import HeaderAdmin from '../../components/Header/Admin/HeaderAdmin';
@@ -167,6 +170,11 @@ const InvoicesPage: React.FC = () => {
                 <IonBreadcrumb href="/homepage-admin">Home</IonBreadcrumb>
                 <IonBreadcrumb href="/invoices">Mes factures</IonBreadcrumb>
             </IonBreadcrumbs>
+            <IonCard color="success">
+                <IonCardHeader>
+                    <IonCardSubtitle>Cliquez sur une ligne pour affiche plus de détails.💡</IonCardSubtitle>
+                </IonCardHeader>
+            </IonCard>
             <IonContent>
                 <IonSearchbar
                     value={searchText}
@@ -204,12 +212,17 @@ const InvoicesPage: React.FC = () => {
             <IonModal isOpen={isModalOpen} onDidDismiss={closeModal}>
                 <IonHeader>
                     <IonToolbar>
-                        <IonTitle>Détails de la facture</IonTitle>
+                        <IonTitle>Détails</IonTitle>
                         <IonButtons slot="end">
                             <IonButton onClick={closeModal}>Fermer</IonButton>
                         </IonButtons>
                     </IonToolbar>
                 </IonHeader>
+                <IonCard color="warning">
+                    <IonCardHeader>
+                        <IonCardSubtitle>Les fonctions MarkAsResolved, MarkAsInProgress et la fonction téléchargement sont en cours de développement. 🚧</IonCardSubtitle>
+                    </IonCardHeader>
+                </IonCard>
                 <IonContent>
                     {selectedItem && (
                         <div className="modal-content">
@@ -231,12 +244,13 @@ const InvoicesPage: React.FC = () => {
                             <p>
                                 <strong>Description:</strong> {selectedItem.description}
                             </p>
-
-                            <IonButton onClick={handleMarkAsProcessed}>Marqué comme traité</IonButton>
-                            <IonButton onClick={handleMarkAsInProgress}>Marqué comme en cours</IonButton>
-                            <IonButton disabled={downloadDisabled} onClick={handleDownload}>
-                                Télécharger
-                            </IonButton>
+                            <div className='btn-modal-section'>
+                                <IonButton className='btn-modal' disabled={downloadDisabled} onClick={handleMarkAsProcessed}>Marqué comme traité</IonButton>
+                                <IonButton className='btn-modal' disabled={downloadDisabled} onClick={handleMarkAsInProgress}>Marqué comme en cours</IonButton>
+                                <IonButton className='btn-modal' disabled={downloadDisabled} onClick={handleDownload}>
+                                    Télécharger
+                                </IonButton>
+                            </div>
                         </div>
                     )}
                 </IonContent>
