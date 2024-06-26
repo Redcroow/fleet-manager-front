@@ -175,7 +175,7 @@ const AddEmployee: React.FC = () => {
                 </div>
                 <IonToast
                     isOpen={showToast}
-                    message="Profil bien créé"
+                    message="Profil bien créé 🎉"
                     duration={3000}
                     color="success"
                 />

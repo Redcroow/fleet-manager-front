@@ -103,6 +103,13 @@ const MyFleetPage: React.FC = () => {
     }
   };
 
+  const handleDetailsClick = (car: Car) => {
+    history.push({
+      pathname: '/detail-car',
+      state: { carDetails: car }
+    });
+  };
+
   return (
     <IonPage>
       <HeaderAdmin />
@@ -112,12 +119,12 @@ const MyFleetPage: React.FC = () => {
       </IonBreadcrumbs>
       <IonCard color="success">
         <IonCardHeader>
-            <IonCardSubtitle>Cliquez sur une ligne pour affiche plus de détails.💡</IonCardSubtitle>
+          <IonCardSubtitle>Cliquez sur une ligne pour affiche plus de détails.💡</IonCardSubtitle>
         </IonCardHeader>
       </IonCard>
       <IonCard color="warning">
         <IonCardHeader>
-            <IonCardSubtitle>La fonction création de véhicule n'est pas encore disponible. 🚧</IonCardSubtitle>
+          <IonCardSubtitle>La fonction création de véhicule n'est pas encore disponible. 🚧</IonCardSubtitle>
         </IonCardHeader>
       </IonCard>
       <IonContent>
@@ -163,7 +170,7 @@ const MyFleetPage: React.FC = () => {
                                     <p><strong>Type de carburant:</strong> {carDetails[car.id].fuelType}</p>
                                   </div>
                                   <div className="right-column">
-                                    <IonButton className="details-button">Voir les détails</IonButton>
+                                    <IonButton className="details-button" onClick={() => handleDetailsClick(car)}>Voir les détails</IonButton>
                                   </div>
                                 </div>
                               </div>

@@ -1,4 +1,3 @@
-// src/api/employee/patchEmployee.ts
 export async function patchEmployee(token: string, employeeId: number, updatedFormData: any): Promise<any> {
     try {
         const response = await fetch(`http://fleetmanager-api.com:81/employee/${employeeId}`, {
