@@ -110,7 +110,7 @@ const HomepageEmployee: React.FC = () => {
               </div>
               <div className='car-info'>
                 <span>Marques: BMW</span>
-                <span>Modèle: M4 Coupé</span>
+                <span>Modèle: M5</span>
                 <span>Immatriculation: AZ-974-BD</span>
                 <span>Origine: <img src="src/assets/images/de.png" /></span>
               </div>
