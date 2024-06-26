@@ -47,7 +47,7 @@ const AddEmployee: React.FC = () => {
     };
 
     const handleBack = () => {
-        history.push('/employee');
+        history.push('/employees');
     };
 
     return (
