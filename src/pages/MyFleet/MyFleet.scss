@@ -1,0 +1,57 @@
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+  
+      th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #3c3b3b;
+        cursor: pointer;
+      }
+  
+      tr.expanded {
+        background-color: #3c3b3b;
+        transition: 0.5s ease-in-out;
+      }
+  
+      tr.accordion-content {
+        display: none;
+      }
+  
+      tr.expanded + .accordion-content {
+        display: table-row;
+  
+        td {
+          padding: 10px;
+          background-color: #3c3b3b;
+        }
+  
+        div {
+          padding: 10px;
+          background-color: #3c3b3b;
+        }
+      }
+    }
+  }
+  
+  
+  .add-employee-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 5px 10px;
+    color: #003D5C;
+    border-radius: 5px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  
+  }
+  
