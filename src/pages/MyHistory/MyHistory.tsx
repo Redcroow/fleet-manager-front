@@ -75,15 +75,12 @@ const HistoryPage: React.FC = () => {
             try {
                 if (item.type === "Facture") {
                     const fuelDataById = await getFuelHistory(token, item.id);
-                    console.log(fuelDataById)
                     setFuelDataById(fuelDataById);
                 } else if (item.type === "Maintenance") {
                     const maintenanceDataById = await getMaintenanceHistory(token, item.id);
-                    console.log(maintenanceDataById)
                     setMaintenanceDataById(maintenanceDataById);
                 } else if (item.type === "Sinistre") {
                     const accidentDataById = await getAccidentHistory(token, item.id);
-                    console.log(accidentDataById)
                     setAccidentDataById(accidentDataById);
                 }
             } catch (error) {
