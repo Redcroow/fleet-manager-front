@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { IonBreadcrumb, IonBreadcrumbs, IonButton, IonContent, IonPage, IonSearchbar } from '@ionic/react';
+import { IonBreadcrumb, IonBreadcrumbs, IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonContent, IonPage, IonSearchbar } from '@ionic/react';
 import HeaderAdmin from '../../components/Header/Admin/HeaderAdmin';
 import './MyFleet.scss';
 import { getCarAll } from '../../api/car/getCarAll';
@@ -110,6 +110,16 @@ const MyFleetPage: React.FC = () => {
         <IonBreadcrumb href="/homepage-admin">Home</IonBreadcrumb>
         <IonBreadcrumb href="/vehicles">Ma flotte</IonBreadcrumb>
       </IonBreadcrumbs>
+      <IonCard color="success">
+        <IonCardHeader>
+            <IonCardSubtitle>Cliquez sur une ligne pour affiche plus de détails.💡</IonCardSubtitle>
+        </IonCardHeader>
+      </IonCard>
+      <IonCard color="warning">
+        <IonCardHeader>
+            <IonCardSubtitle>La fonction création de véhicule n'est pas encore disponible. 🚧</IonCardSubtitle>
+        </IonCardHeader>
+      </IonCard>
       <IonContent>
         <IonSearchbar
           value={searchText}
@@ -118,49 +128,59 @@ const MyFleetPage: React.FC = () => {
           placeholder="Rechercher par marque ou modèle"
           autocapitalize="off"
         />
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Voiture</th>
-                <th>Immatriculation</th>
-                <th>Attribution</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCars.map((car, index) => (
-                <React.Fragment key={index}>
-                  <tr onClick={() => handleRowClick(index, car.id)} className={expandedRowIndex === index ? 'expanded' : ''}>
-                    <td>{car.brand} {car.model}</td>
-                    <td>{car.registrationPlate}</td>
-                    <td>{car.assignedEmployee ? `${car.assignedEmployee.name} ${car.assignedEmployee.surname}` : "Pas d'attribution"}</td>
-                  </tr>
-                  {expandedRowIndex === index && (
-                    <tr className="accordion-content">
-                      <td colSpan={4}>
-                        <div className="car-details-card">
-                          {carDetails[car.id] ? (
-                            <div>
-                              <img src="src/assets/images/bmw-fiche-tech.png" alt="Car Icon" className="car-icon" />
-                              <h2>{carDetails[car.id].brand} {carDetails[car.id].model}</h2>
-                              <p>Attribution: {car.assignedEmployee ? `${car.assignedEmployee.name} ${car.assignedEmployee.surname}` : "Pas d'attribution"}</p>
-                              <p>Immatriculation: {carDetails[car.id].registrationPlate}</p>
-                              <p>Type de carburant: {carDetails[car.id].fuelType}</p>
-                              <IonButton className="details-button">Voir les détails</IonButton>
-                            </div>
-                          ) : (
-                            <p>Chargement des détails...</p>
-                          )}
-                        </div>
-                      </td>
+        <div className="ion-padding table-container">
+          <div className="table-wrapper">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Voiture</th>
+                  <th>Immatriculation</th>
+                  <th>Attribution</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCars.map((car, index) => (
+                  <React.Fragment key={index}>
+                    <tr onClick={() => handleRowClick(index, car.id)} className={expandedRowIndex === index ? 'expanded' : ''}>
+                      <td>{car.brand} {car.model}</td>
+                      <td>{car.registrationPlate}</td>
+                      <td>{car.assignedEmployee ? `${car.assignedEmployee.name} ${car.assignedEmployee.surname}` : "Pas d'attribution"}</td>
                     </tr>
-                  )}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+                    {expandedRowIndex === index && (
+                      <tr className="accordion-content">
+                        <td colSpan={4}>
+                          <div className="car-details-card">
+                            {carDetails[car.id] ? (
+                              <div>
+                                <div className='car-header-expended'>
+                                  <img src="src/assets/images/bmw-fiche-tech.png" alt="Car Icon" className="car-icon" />
+                                  <h2>{carDetails[car.id].brand} {carDetails[car.id].model}</h2>
+                                </div>
+                                <div className='car-body-expended'>
+                                  <div className="left-column">
+                                    <p><strong>Attribution: </strong> {car.assignedEmployee ? `${car.assignedEmployee.name} ${car.assignedEmployee.surname}` : "Pas d'attribution"}</p>
+                                    <p><strong>Immatriculation:</strong> {carDetails[car.id].registrationPlate}</p>
+                                    <p><strong>Type de carburant:</strong> {carDetails[car.id].fuelType}</p>
+                                  </div>
+                                  <div className="right-column">
+                                    <IonButton className="details-button">Voir les détails</IonButton>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <p>Les détails pour ce véhicule ne sont pas disponible pour le moment.</p>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-        <IonButton className="add-vehicle-button" onClick={() => history.push('/add-vehicle')}>
+        <IonButton disabled className="add-vehicle-button" onClick={() => history.push('/add-vehicle')}>
           Ajouter un véhicule
         </IonButton>
       </IonContent>

@@ -11,7 +11,8 @@ import {
     IonRouterLink,
     IonIcon,
     IonProgressBar,
-    IonImg
+    IonImg,
+    IonToast
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
@@ -20,34 +21,59 @@ import { postEmployee } from '../../api/employee/postEmployee';
 
 const AddEmployee: React.FC = () => {
     const [step, setStep] = useState(1);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [name, setFirstName] = useState('');
+    const [surname, setLastName] = useState('');
+    const [phone_number, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [position, setPosition] = useState('Employee');
+    const [showToast, setShowToast] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const passwordRef = useRef<HTMLIonInputElement>(null);
     const history = useHistory();
     const token = localStorage.getItem('access_token');
-    
+
+    const clearInputs = () => {
+        setFirstName('');
+        setLastName('');
+        setPhoneNumber('');
+        setEmail('');
+        setPassword('');
+        setStep(1);
+    };
+
     const handleNextStep = async () => {
         if (step === 1) {
             setStep(2);
         } else {
+            setIsButtonDisabled(true);
             const enteredPassword = passwordRef.current?.value || '';
-            const employeeData = { firstName, lastName, phoneNumber, email, password: enteredPassword, position };
+            const employeeData = { name, surname, phone_number, email, password: enteredPassword, position };
             try {
-                if(token) {
+                if (token) {
                     const response = await postEmployee(token, employeeData);
+                    if (response) {
+                        setShowToast(true);
+                        setTimeout(() => {
+                            setShowToast(false);
+                            clearInputs();
+                            history.push('/employees');
+                            setIsButtonDisabled(false);
+                            window.location.reload();
+                        }, 3000);
+                    }
                 }
             } catch (error) {
                 console.error('Error registering employee:', error);
+                setIsButtonDisabled(false);
             }
         }
     };
 
     const handleBack = () => {
+        clearInputs();
         history.push('/employees');
+        window.location.reload();
     };
 
     return (
@@ -72,7 +98,7 @@ const AddEmployee: React.FC = () => {
                                 <IonInput
                                     type="text"
                                     placeholder="Nom"
-                                    value={firstName}
+                                    value={name}
                                     onIonChange={(e) => setFirstName(e.detail.value!)}
                                     disabled={step === 2}
                                 ></IonInput>
@@ -83,7 +109,7 @@ const AddEmployee: React.FC = () => {
                                 <IonInput
                                     type="text"
                                     placeholder="Prénom"
-                                    value={lastName}
+                                    value={surname}
                                     onIonChange={(e) => setLastName(e.detail.value!)}
                                     disabled={step === 2}
                                 ></IonInput>
@@ -94,7 +120,7 @@ const AddEmployee: React.FC = () => {
                                 <IonInput
                                     type="tel"
                                     placeholder="Téléphone"
-                                    value={phoneNumber}
+                                    value={phone_number}
                                     onIonChange={(e) => setPhoneNumber(e.detail.value!)}
                                     disabled={step === 2}
                                 ></IonInput>
@@ -127,8 +153,8 @@ const AddEmployee: React.FC = () => {
                         }
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
-                                <IonButton expand="block" onClick={handleNextStep}>
-                                    {step === 1 ? 'Suivant' : 'S\'inscrire'}
+                                <IonButton expand="block" onClick={handleNextStep} disabled={isButtonDisabled}>
+                                    {step === 1 ? 'Suivant' : 'Ajouter'}
                                 </IonButton>
                             </IonCol>
                         </IonRow>
@@ -147,6 +173,12 @@ const AddEmployee: React.FC = () => {
                         </IonRow>
                     </IonGrid>
                 </div>
+                <IonToast
+                    isOpen={showToast}
+                    message="Profil bien créé"
+                    duration={3000}
+                    color="success"
+                />
             </IonContent>
         </IonPage>
     );

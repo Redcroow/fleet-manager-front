@@ -1,21 +1,27 @@
 .table-container {
-    width: 100%;
-    overflow-x: auto;
-  
+  width: 100%;
+  overflow-x: auto;
+  .table-wrapper {
+    height: 350px;
+    overflow-y: auto;
     table {
       width: 100%;
       border-collapse: collapse;
-  
-      th, td {
-        padding: 10px;
+
+      .table th, .table td {
+        border: 1px solid black;
+        padding: 8px !important;
+        font-size: 15px;
         text-align: left;
-        border-bottom: 1px solid #3c3b3b;
         cursor: pointer;
+      }
+      .table th {
+        text-align: left;
       }
   
       tr.expanded {
-        background-color: #3c3b3b;
-        transition: 0.5s ease-in-out;
+        background-color: #ddd;
+        color: black;
       }
   
       tr.accordion-content {
@@ -24,24 +30,21 @@
   
       tr.expanded + .accordion-content {
         display: table-row;
-  
+
         td {
-          padding: 10px;
-          background-color: #3c3b3b;
+          background-color: black;
         }
   
         div {
-          padding: 10px;
-          background-color: #3c3b3b;
+          background-color: black;
         }
       }
     }
   }
-  
-  
-  .add-employee-button {
+}
+
+  .add-vehicle-button {
     position: fixed;
-    bottom: 20px;
     left: 20px;
     padding: 5px 10px;
     color: #003D5C;
@@ -52,6 +55,32 @@
     font-size: 12px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
+  }
+
+  .car-header-expended {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .car-body-expended {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      p {
+        margin: 5px 0;
+      }
+    }
   
+    .right-column {
+      flex: 0.5;
+      .details-button {
+        font: small-caption;
+      }
+    }
   }
   

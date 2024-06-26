@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { IonBreadcrumb, IonBreadcrumbs, IonButton, IonContent, IonPage, IonSearchbar } from '@ionic/react';
+import { IonBreadcrumb, IonBreadcrumbs, IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonContent, IonIcon, IonPage, IonSearchbar } from '@ionic/react';
 import HeaderAdmin from '../../components/Header/Admin/HeaderAdmin';
 import './Employees.scss';
 import { getEmployeeAll } from '../../api/employee/getEmployeeAll';
 import { jwtDecode } from 'jwt-decode';
 import { getEmployee } from '../../api/employee/getEmployee';
 import { getCar } from '../../api/car/getCar';
+import { personOutline } from 'ionicons/icons';
 
 interface Employee {
   name: string;
@@ -113,6 +114,11 @@ const Employees: React.FC = () => {
         <IonBreadcrumb href="/homepage-admin">Home</IonBreadcrumb>
         <IonBreadcrumb href="/employees">Mes employées</IonBreadcrumb>
       </IonBreadcrumbs>
+      <IonCard color="success">
+          <IonCardHeader>
+              <IonCardSubtitle>Cliquez sur une ligne pour affiche plus de détails.💡</IonCardSubtitle>
+          </IonCardHeader>
+      </IonCard>
       <IonContent>
         <IonSearchbar
           value={searchText}
@@ -121,51 +127,59 @@ const Employees: React.FC = () => {
           placeholder="Rechercher par nom ou prénom"
           autocapitalize="off"
         />
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Téléphone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredEmployees.map((employee, index) => (
-                <React.Fragment key={index}>
-                  <tr onClick={() => handleRowClick(index, employee.id)} className={expandedRowIndex === index ? 'expanded' : ''}>
-                    <td>{employee.name}</td>
-                    <td>{employee.surname}</td>
-                    <td>{employee.phone_number}</td>
-                  </tr>
-                  {expandedRowIndex === index && (
-                    <tr className="accordion-content">
-                      <td colSpan={3}>
-                      <div>
-                      {employeeDetails[employee.id] ? (
-                        <div>
-                          {/* Afficher ici les détails supplémentaires */}
-                          <p>Email: {employeeDetails[employee.id].email}</p>
-                          <p>
-                            Attribution: {employeeCars[employee.id] ? `${employeeCars[employee.id].brand} ${employeeCars[employee.id].model}` : "Pas de voiture attitrée"}
-                            <br />
-                            {employeeCars[employee.id] && (
-                              <span>Immatriculation : {employeeCars[employee.id].registrationPlate}</span>
-                            )}
-                          </p>
-                          {/* Ajoutez d'autres détails que vous souhaitez afficher */}
-                        </div>
-                      ) : (
-                        <p>Chargement des détails...</p>
-                      )}
-                    </div>
-                      </td>
+        <div className="ion-padding table-container">
+          <div className='table-wrapper'>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Prénom</th>
+                  <th>Téléphone</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredEmployees.map((employee, index) => (
+                  <React.Fragment key={index}>
+                    <tr onClick={() => handleRowClick(index, employee.id)} className={expandedRowIndex === index ? 'expanded' : ''}>
+                      <td>{employee.name}</td>
+                      <td>{employee.surname}</td>
+                      <td>{employee.phone_number}</td>
                     </tr>
-                  )}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+                    {expandedRowIndex === index && (
+                      <tr className="accordion-content">
+                        <td colSpan={3}>
+                        <div>
+                        {employeeDetails[employee.id] ? (
+                          <div>
+                            <div className='car-infos-user-accordion'>
+                            <IonIcon icon={personOutline} className='icon-user-accordion'></IonIcon>
+                            <p>{employee.name} {employee.surname}</p>
+                            </div>
+                            <div className='car-infos-accordion'>
+                              <p>
+                                Attribution: {employeeCars[employee.id] ? `${employeeCars[employee.id].brand} ${employeeCars[employee.id].model}` : "Pas de voiture attitrée"}
+                              </p>
+                              <p>{employeeCars[employee.id] && (
+                                  <span>Immat : {employeeCars[employee.id].registrationPlate}</span>
+                                )}</p>
+                            </div>
+                            <div className='car-user-accordion'>
+                              <p>Email: {employeeDetails[employee.id].email}</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <p>Chargement des détails...</p>
+                        )}
+                      </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
         </div>
         <IonButton className="add-employee-button" onClick={() => history.push('/add-employee')}>
           Ajout Employé
