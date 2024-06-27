@@ -21,15 +21,24 @@ const ForgotPage: React.FC = () => {
     const emailRef = useRef<HTMLIonInputElement>(null);
     const history = useHistory();
     const [showAlert, setShowAlert] = useState(false);
+    const [buttonDisabled, setButtonDisabled] = useState(false);
 
     const handleSendEmail = () => {
         const emailValue = emailRef.current?.value;
 
         setShowAlert(true);
+        setButtonDisabled(true);
 
         setTimeout(() => {
             setShowAlert(false);
         }, 4000);
+
+        // Add 5-second delay before proceeding
+        setTimeout(() => {
+            console.log('Email sent to:', emailValue);
+            // Additional logic after timeout (e.g., sending email request)
+            setButtonDisabled(false);
+        }, 5000);
     };
 
     const handleBack = () => {
@@ -63,7 +72,7 @@ const ForgotPage: React.FC = () => {
                         </IonRow>
                         <IonRow className="ion-justify-content-center">
                             <IonCol size="12" size-md="6">
-                                <IonButton expand="block" onClick={handleSendEmail}>Envoyer</IonButton>
+                                <IonButton expand="block" onClick={handleSendEmail} disabled={buttonDisabled}>Envoyer</IonButton>
                             </IonCol>
                         </IonRow>
                         <IonRow>
